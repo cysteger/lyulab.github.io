@@ -6,61 +6,150 @@ title: Lyu Lab
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="stylesheet" href="assets/custom.css">
   <meta charset="UTF-8">
   <title>Lyu Lab</title>
+
+  <!-- Optional: keep your external CSS file -->
+  <link rel="stylesheet" href="assets/custom.css">
+
   <style>
-    body {
+    /* ================================
+       NC STATE–INSPIRED COLOR SYSTEM
+       (Hex colors are not trademarked)
+       ================================ */
+    :root {
+      --ncsu-red: #CC0000;
+      --ncsu-dark-red: #990000;
+      --ncsu-gray: #f2f2f2;
+      --ncsu-text: #333333;
+    }
+
+    /* ================================
+       HEADER
+       ================================ */
+    .ncsu-header {
+      background: var(--ncsu-red);
+      padding: 18px 0;
+      color: white;
+      width: 100%;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+    }
+
+    .ncsu-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .lab-name {
+      font-size: 30px;
+      font-weight: bold;
+      letter-spacing: 0.5px;
+    }
+
+    .university-name {
+      font-size: 16px;
+      opacity: 0.95;
+      margin-top: 2px;
+    }
+
+    /* ================================
+       MAIN CONTENT WRAPPER
+       ================================ */
+    .page-wrapper {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 0 20px;
+      color: var(--ncsu-text);
       font-family: Arial, sans-serif;
-      margin: 40px;
-      max-width: 800px;
       line-height: 1.6;
     }
+
     h1 {
       margin-bottom: 10px;
+      font-size: 32px;
+      color: var(--ncsu-dark-red);
     }
+
+    /* ================================
+       TOOL BOX
+       ================================ */
+    .box {
+      border-left: 6px solid var(--ncsu-red);
+      padding: 20px;
+      background: var(--ncsu-gray);
+      margin-top: 30px;
+      border-radius: 4px;
+    }
+
+    /* ================================
+       BUTTON
+       ================================ */
     .tool-link {
       display: inline-block;
       margin-top: 20px;
       padding: 12px 18px;
-      background: #007acc;
+      background: var(--ncsu-red);
       color: white;
       text-decoration: none;
-      border-radius: 6px;
+      border-radius: 4px;
       font-size: 18px;
+      font-weight: bold;
     }
+
     .tool-link:hover {
-      background: #005fa3;
+      background: var(--ncsu-dark-red);
     }
-    .box {
-      border: 2px solid #ccc;
-      padding: 20px;
-      background: #f9f9f9;
-      margin-top: 30px;
-    }
-    .page-wrapper {
-  max-width: 900px;
-  margin: 0 auto;
-  }
   </style>
 </head>
 
 <body>
+
+<!-- ================================
+     NC STATE–INSPIRED HEADER
+     ================================ -->
+<header class="ncsu-header">
+  <div class="ncsu-container">
+    <span class="lab-name">Lyu Lab</span>
+    <span class="university-name">North Carolina State University</span>
+  </div>
+</header>
+
+<!-- ================================
+     MAIN CONTENT
+     ================================ -->
 <div class="page-wrapper">
 
-<h1>Lyu Lab Computational Tools</h1>
-<p>Welcome to the Lyu Lab’s collection…</p>
+  <h1>Lyu Lab Computational Tools</h1>
 
-<div class="box">
-  <h2>Available Tools</h2>
-  …
+  <p>
+    Welcome to the Lyu Lab’s collection of interactive computational tools for microbiome and
+    metagenomic analysis. This site hosts calculators and utilities designed to support sequencing
+    study design, data interpretation, and workflow optimization.
+  </p>
+
+  <div class="box">
+    <h2>Available Tools</h2>
+
+    <h3>Metagenomic Sequencing Depth & Coverage Calculator</h3>
+    <p>
+      Estimate genome coverage, required sequencing depth, and minimum relative abundance thresholds
+      for MAG recovery, pathway profiling, and taxonomic detection.
+    </p>
+
+    <a class="tool-link" href="sequencing_depth_tool.html">
+      Open Sequencing Depth Tool
+    </a>
+  </div>
+
+  <p style="margin-top:40px; color:#555;">
+    More tools will be added here as they are developed.
+  </p>
+
 </div>
 
-<p style="margin-top:40px; color:#555;">
-  More tools will be added here as they are developed.
-</p>
-
-</div> 
 </body>
-
 </html>
+
