@@ -205,17 +205,6 @@
 
   <!-- DNA quality + quantity -->
   <div class="slider-container">
-    <label><strong>DNA Quality:</strong></label>
-
-    <input type="range" id="dnaSlider" min="0" max="3" step="1" value="3" oninput="updateAll()">
-
-    <div class="slider-labels">
-      <span title="<1 ng — unstable, high PCR cycles">Very Low<br>&lt;1 ng</span>
-      <span title="1–9.9 ng — high PCR cycles, e.g., 1.3 ng">Low<br>1–9.9 ng</span>
-      <span title="10–99 ng — moderate PCR cycles">Moderate<br>10–99 ng</span>
-      <span title="≥100 ng — low PCR cycles, stable profiles">High<br>≥100 ng</span>
-    </div>
-
     <label style="display:block; margin-top:10px;">
       <strong>DNA Quantity (ng):</strong>
       <input id="dnaInput" type="number" value="10" step="0.1" oninput="updateAll()">
@@ -599,8 +588,7 @@ Required depth (Gb) = (Coverage × G) / (1000 × A)
    GLOBAL SETTINGS
    ============================================================ */
 let settings = {
-  ecosystem: "human",
-  dnaQuality: 3   // slider default = High DNA quality
+  ecosystem: "human"
 };
 
 /* ============================================================
@@ -620,18 +608,7 @@ const depthTiers = {
 };
 
 /* ============================================================
-   DNA QUALITY MULTIPLIERS
-   slider: 0 = Very Low → 3 = High
-   ============================================================ */
-const dnaMultipliers = [
-  3.0,  // Very Low (<1 ng)
-  4.0,  // Low (1–9.9 ng)
-  6.0,  // Moderate (10–99 ng)
-  9.0   // High (≥100 ng)
-];
-
-/* ============================================================
-   DNA QUANTITY CAP
+   DNA QUANTITY CAP ONLY
    1 ng ≈ 1 Gbp of unique sequence
    ============================================================ */
 function getDnaCapGbp() {
@@ -640,13 +617,8 @@ function getDnaCapGbp() {
 }
 
 function getEffectiveDepth(D_raw) {
-  const multiplier = dnaMultipliers[parseInt(document.getElementById('dnaSlider').value, 10)];
   const dnaCap = getDnaCapGbp();
-
-  const qualityAdjusted = D_raw * multiplier;
-  const effective = Math.min(qualityAdjusted, dnaCap);
-
-  return { effective, multiplier, dnaCap };
+  return Math.min(D_raw, dnaCap); // no multiplier anymore
 }
 
 /* ============================================================
@@ -658,7 +630,9 @@ function setEcosystem(mode) {
   document.getElementById("btnHuman").classList.toggle("active", mode === "human");
   document.getElementById("btnRumen").classList.toggle("active", mode === "rumen");
 
-  // Static tables always visible; toggle only affects cheat sheet
+  document.getElementById("humanDepthTable").style.display = mode === "human" ? "table" : "none";
+  document.getElementById("rumenDepthTable").style.display = mode === "rumen" ? "table" : "none";
+
   updateAll();
 }
 
@@ -689,43 +663,22 @@ function updateLegend() {
   document.getElementById("legendBox").innerHTML = `
     <div class="legend-title">Coverage Tiers</div>
 
-    <div class="legend-item">
-      <div class="legend-color" style="background:#e3d7ff;"></div>
-      Ideal for Taxonomic Profiling
-    </div>
-
-    <div class="legend-item">
-      <div class="legend-color" style="background:#d0ecff;"></div>
-      Ideal for Functional Profiling
-    </div>
-
-    <div class="legend-item">
-      <div class="legend-color" style="background:#bfe8ff;"></div>
-      Ideal for High‑Resolution Functional Profiling
-    </div>
-
-    <div class="legend-item">
-      <div class="legend-color" style="background:#ffe2cc;"></div>
-      Ideal for MAG Creation
-    </div>
-
-    <div class="legend-item">
-      <div class="legend-color" style="background:#ffffff;"></div>
-      Below Recommended Threshold
-    </div>
+    <div class="legend-item"><div class="legend-color" style="background:#e3d7ff;"></div>Ideal for Taxonomic Profiling</div>
+    <div class="legend-item"><div class="legend-color" style="background:#d0ecff;"></div>Ideal for Functional Profiling</div>
+    <div class="legend-item"><div class="legend-color" style="background:#bfe8ff;"></div>Ideal for High‑Resolution Functional Profiling</div>
+    <div class="legend-item"><div class="legend-color" style="background:#ffe2cc;"></div>Ideal for MAG Creation</div>
+    <div class="legend-item"><div class="legend-color" style="background:#ffffff;"></div>Below Recommended Threshold</div>
   `;
 }
 
 /* ============================================================
-   EXTENDED DYNAMIC TABLE
+   EXTENDED DYNAMIC TABLE (NEW RA LADDER)
    ============================================================ */
 function updateCheatSheet() {
   const G = parseFloat(document.getElementById('genomeCheat').value) || 1;
-  settings.dnaQuality = parseInt(document.getElementById('dnaSlider').value, 10);
-
   const depths = depthTiers[settings.ecosystem];
 
-  // New RA ladder (fractions): 0.01%, 0.05%, 0.1%, 1%, 2.5%, 5%, 10%, 15%, 20%
+  // New RA ladder
   const abundances = [0.0001, 0.0005, 0.001, 0.01, 0.025, 0.05, 0.1, 0.15, 0.2];
 
   const tbody = document.querySelector('#cheatTable tbody');
@@ -738,7 +691,7 @@ function updateCheatSheet() {
     depthCell.textContent = D_raw;
     row.appendChild(depthCell);
 
-    const { effective } = getEffectiveDepth(D_raw);
+    const effective = getEffectiveDepth(D_raw);
 
     abundances.forEach(A => {
       const cell = document.createElement('td');
@@ -767,18 +720,18 @@ function computeCoverage() {
   const G = parseFloat(document.getElementById('genome').value) || 1;
   const D_raw = parseFloat(document.getElementById('depth').value) || 0;
 
-  const { effective } = getEffectiveDepth(D_raw);
+  const effective = getEffectiveDepth(D_raw);
 
   if (effective <= 0 || A <= 0 || G <= 0) {
     document.getElementById('coverageResult').innerText =
-      "Estimated coverage (with DNA-quality and DNA-quantity adjustment): 0×";
+      "Estimated coverage (DNA‑quantity limited): 0×";
     return;
   }
 
   const coverage = (effective * 1000 * A) / G;
 
   document.getElementById('coverageResult').innerText =
-    `Estimated coverage (with DNA-quality and DNA-quantity adjustment): ${coverage.toFixed(2)}×`;
+    `Estimated coverage (DNA‑quantity adjusted): ${coverage.toFixed(2)}×`;
 }
 
 /* ============================================================
@@ -789,25 +742,22 @@ function computeRequiredDepth() {
   const A = parseFloat(document.getElementById('abundance2').value) / 100.0;
   const G = parseFloat(document.getElementById('genome2').value) || 1;
 
-  const { multiplier, dnaCap } = getEffectiveDepth(1); // use to get current multiplier & cap
+  const dnaCap = getDnaCapGbp();
 
-  if (C <= 0 || A <= 0 || G <= 0 || multiplier <= 0) {
+  if (C <= 0 || A <= 0 || G <= 0) {
     document.getElementById('depthResult').innerText = "Required sequencing depth: —";
     return;
   }
 
-  // Depth needed after quality adjustment
+  // Depth needed AFTER DNA quantity cap
   const adjustedDepthNeeded = (C * G) / (1000 * A);
 
-  // Raw depth before quality multiplier
-  const rawDepthNeeded = adjustedDepthNeeded / multiplier;
-
-  if (adjustedDepthNeeded > dnaCap && dnaCap > 0) {
+  if (dnaCap > 0 && adjustedDepthNeeded > dnaCap) {
     document.getElementById('depthResult').innerText =
-      `Required sequencing depth: ${rawDepthNeeded.toFixed(2)} Gb (WARNING: DNA-limited; cap = ${dnaCap.toFixed(2)} Gb)`;
+      `Required depth: ${adjustedDepthNeeded.toFixed(2)} Gb (IMPOSSIBLE — DNA‑limited; cap = ${dnaCap.toFixed(2)} Gb)`;
   } else {
     document.getElementById('depthResult').innerText =
-      `Required sequencing depth (adjusted for DNA quality): ${rawDepthNeeded.toFixed(2)} Gb`;
+      `Required depth (DNA‑quantity adjusted): ${adjustedDepthNeeded.toFixed(2)} Gb`;
   }
 }
 
@@ -819,11 +769,11 @@ function computeRequiredRA() {
   const G = parseFloat(document.getElementById('genomeRA').value) || 1;
   const D_raw = parseFloat(document.getElementById('depthRA').value) || 0;
 
-  const { effective } = getEffectiveDepth(D_raw);
+  const effective = getEffectiveDepth(D_raw);
 
   if (C <= 0 || G <= 0 || effective <= 0) {
     document.getElementById('raResult').innerText =
-      "Minimum relative abundance required: — (DNA-limited or invalid inputs)";
+      "Minimum RA: — (DNA‑limited or invalid)";
     return;
   }
 
@@ -831,7 +781,7 @@ function computeRequiredRA() {
   const A_percent = A * 100;
 
   document.getElementById('raResult').innerText =
-    `Minimum relative abundance required (adjusted for DNA quality and DNA quantity): ${A_percent.toFixed(4)}%`;
+    `Minimum RA (DNA‑quantity adjusted): ${A_percent.toFixed(4)}%`;
 }
 
 /* ============================================================
