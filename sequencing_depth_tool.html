@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -71,34 +70,34 @@
   }
 
   /* ============================
-   MAG TABLE COLOR CODING
-   ============================ */
-.mag-high { background-color: #b7f7b7; }      /* green */
-.mag-moderate { background-color: #f7f7b7; }  /* yellow */
-.mag-low { background-color: #f7d3b7; }       /* orange */
-.mag-unlikely { background-color: #f2b7b7; }  /* red */
+     MAG TABLE COLOR CODING
+     ============================ */
+  .mag-high { background-color: #b7f7b7; }      /* green */
+  .mag-moderate { background-color: #f7f7b7; }  /* yellow */
+  .mag-low { background-color: #f7d3b7; }       /* orange */
+  .mag-unlikely { background-color: #f2b7b7; }  /* red */
 
-/* ============================
-   MAG LEGEND
-   ============================ */
-.mag-legend-box {
-  margin-top: 10px;
-  padding: 12px;
-  border: 1px solid #aaa;
-  background: #fafafa;
-  font-size: 14px;
-}
-.mag-legend-item {
-  display: flex;
-  align-items: center;
-  margin-top: 6px;
-}
-.mag-legend-color {
-  width: 18px;
-  height: 18px;
-  margin-right: 8px;
-  border: 1px solid #666;
-}
+  /* ============================
+     MAG LEGEND
+     ============================ */
+  .mag-legend-box {
+    margin-top: 10px;
+    padding: 12px;
+    border: 1px solid #aaa;
+    background: #fafafa;
+    font-size: 14px;
+  }
+  .mag-legend-item {
+    display: flex;
+    align-items: center;
+    margin-top: 6px;
+  }
+  .mag-legend-color {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    border: 1px solid #666;
+  }
 </style>
 </head>
 
@@ -248,9 +247,6 @@
 <!-- ============================
      TABLE 2 — MAG RECOVERY
      ============================ -->
-<!-- ============================
-     TABLE 2 — MAG RECOVERY
-     ============================ -->
 <table id="magRecoveryTable" class="depth-cheatsheet">
   <caption><strong>Expected MAG Recovery Across Sequencing Depths and Relative Abundances</strong></caption>
 
@@ -367,7 +363,6 @@ Required depth (Gb) = (Coverage × G) / (1000 × A)
   </pre>
 
   <p>This is commonly used in metagenomic sampling‑depth calculations for MAG recovery.</p>
-
 
   <!-- ============================
        GROUPED REFERENCES
@@ -499,6 +494,7 @@ Required depth (Gb) = (Coverage × G) / (1000 × A)
     for MAG recovery, pathway inference, and taxonomic profiling.
   </p>
 </div>
+
 <script>
 /* ============================================================
    DNA QUANTITY CAP
@@ -604,27 +600,22 @@ function updateMagTable() {
 
     abundances.forEach(a => {
       const cov = (effective * 1000 * a.val) / G;
-      let status = "";
-      let status = "";
+      const cell = document.createElement("td");
+
       if (cov >= MAG_THRESHOLD) {
-        status = "High MAG recovery";
+        cell.textContent = "High MAG recovery";
         cell.className = "mag-high";
       } else if (cov >= MAG_THRESHOLD * 0.5) {
-        status = "Moderate";
+        cell.textContent = "Moderate";
         cell.className = "mag-moderate";
       } else if (cov >= MAG_THRESHOLD * 0.1) {
-        status = "Low";
+        cell.textContent = "Low";
         cell.className = "mag-low";
       } else {
-        status = "Unlikely";
+        cell.textContent = "Unlikely";
         cell.className = "mag-unlikely";
       }
 
-cell.textContent = status;
-
-
-      const cell = document.createElement("td");
-      cell.textContent = status;
       row.appendChild(cell);
     });
 
@@ -690,3 +681,4 @@ updateAll();
 
 </body>
 </html>
+
