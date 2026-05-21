@@ -31,7 +31,7 @@
 
   .color-taxonomy { background-color: #e3d7ff; }
   .color-functional { background-color: #d0ecff; }
-  .color-highres { background-color: #9EE7C9 !important; }
+  .color-highres { background-color: #9EE7C9; }
   .color-mag { background-color: #ffe2cc; }
   .color-low { background-color: #ffffff; }
 
@@ -262,7 +262,7 @@ DNA quantity limits the effective depth, so deeper sequencing may not increase c
     <td>High pathway completeness; moderate rare gene recovery.</td>
   </tr>
 
-  <tr class=".color-highres">
+  <tr class="color-highres">
     <td>10 Gbp</td>
     <td><strong>High‑Resolution Functional</strong></td>
     <td>≥10,000×</td>
@@ -569,7 +569,7 @@ function getColorClass(cov) {
   }
 
   if (cov >= t.mag) return "color-mag";
-  if (cov >= t.highres) return ".color-highres";
+  if (cov >= t.highres) return "color-highres";
   if (cov >= t.functional) return "color-functional";
   if (cov >= t.taxonomy) return "color-taxonomy";
   return "color-low";
