@@ -106,24 +106,48 @@
 <h1>Meta-CD: Metagenomic Sequencing Coverage and Depth Calculator</h1>
 
 <!-- ============================
+     UNIFIED INPUT PANEL
+     ============================ -->
+<h2>Input Parameters</h2>
+
+<div style="padding:20px; border:1px solid #888; background:#f9f9f9; margin-bottom:30px;">
+
+  <label>
+    Relative abundance (%):
+    <input id="abundance" type="number" value="1" step="0.01" oninput="updateAll()">
+  </label>
+
+  <label>
+    Genome size (Mb):
+    <input id="genome" type="number" value="4" step="0.1" oninput="updateAll()">
+  </label>
+
+  <label>
+    Sequencing depth (Gb):
+    <input id="depth" type="number" value="10" step="0.1" oninput="updateAll()">
+  </label>
+
+  <label>
+    Target coverage for depth calculator (×):
+    <input id="targetCoverage" type="number" value="10" step="0.1">
+  </label>
+
+  <label>
+    Target coverage for minimum RA (×):
+    <input id="targetCoverageRA" type="number" value="5" step="0.1">
+  </label>
+
+  <label>
+    DNA Quantity (ng):
+    <input id="dnaInput" type="number" value="10" step="0.1" oninput="updateAll()">
+  </label>
+
+</div>
+
+<!-- ============================
      COVERAGE FROM DEPTH
      ============================ -->
 <h2>Coverage From Sequencing Depth</h2>
-
-<label>
-  Relative abundance (%):
-  <input id="abundance" type="number" value="1" step="0.01">
-</label>
-
-<label>
-  Genome size (Mb):
-  <input id="genome" type="number" value="4" step="0.1">
-</label>
-
-<label>
-  Sequencing depth (Gb):
-  <input id="depth" type="number" value="10" step="0.1">
-</label>
 
 <button onclick="computeCoverage()">Compute Coverage</button>
 
@@ -134,43 +158,26 @@
      ============================ -->
 <h2>Required Sequencing Depth for Target Coverage</h2>
 
-<label>
-  Target coverage (×):
-  <input id="targetCoverage" type="number" value="10" step="0.1">
-</label>
-
-<label>
-  Relative abundance (%):
-  <input id="abundance2" type="number" value="1" step="0.01">
-</label>
-
-<label>
-  Genome size (Mb):
-  <input id="genome2" type="number" value="4" step="0.1">
-</label>
-
 <button onclick="computeRequiredDepth()">Compute Required Depth</button>
 
 <p id="depthResult" style="font-weight:bold;"></p>
 
 <!-- ============================
-     DNA QUANTITY INPUT
+     DNA QUANTITY (DISPLAY ONLY)
      ============================ -->
 <h2>DNA Quantity</h2>
-<label>
-  <strong>DNA Quantity (ng):</strong>
-  <input id="dnaInput" type="number" value="10" step="0.1" oninput="updateAll()">
-</label>
+<p style="font-size:14px;">
+  DNA quantity (ng) is set in the input panel above and is used as a cap on effective sequencing depth.
+</p>
 
 <!-- ============================
      CHEAT SHEET
      ============================ -->
 <h2>Cheat Sheet: Coverage Across Depths and Relative Abundances</h2>
 
-<label>
-  Genome size (Mb):
-  <input id="genomeCheat" type="number" value="4" step="0.1" oninput="updateAll()">
-</label>
+<p style="font-size:14px;">
+  The cheat sheet uses the genome size (Mb) from the input panel above.
+</p>
 
 <div class="scroll-table">
   <table id="cheatTable">
@@ -300,21 +307,6 @@
      ============================ -->
 <h2>Minimum Relative Abundance Required</h2>
 
-<label>
-  Target coverage (×):
-  <input id="targetCoverageRA" type="number" value="5" step="0.1">
-</label>
-
-<label>
-  Genome size (Mb):
-  <input id="genomeRA" type="number" value="4" step="0.1">
-</label>
-
-<label>
-  Sequencing depth (Gb):
-  <input id="depthRA" type="number" value="10" step="0.1">
-</label>
-
 <button onclick="computeRequiredRA()">Compute Minimum RA</button>
 
 <p id="raResult" style="font-weight:bold;"></p>
@@ -363,6 +355,7 @@ Required depth (Gb) = (Coverage × G) / (1000 × A)
   </pre>
 
   <p>This is commonly used in metagenomic sampling‑depth calculations for MAG recovery.</p>
+
 
   <!-- ============================
        GROUPED REFERENCES
@@ -527,7 +520,7 @@ function updateLegend() {
    COLOR CODING
    ============================================================ */
 function getColorClass(cov) {
-  const G = parseFloat(document.getElementById('genomeCheat').value) || 2;
+  const G = parseFloat(document.getElementById('genome').value) || 2;
 
   let t;
   if (G <= 2.25) {
@@ -547,7 +540,7 @@ function getColorClass(cov) {
    CHEAT SHEET
    ============================================================ */
 function updateCheatSheet() {
-  const G = parseFloat(document.getElementById('genomeCheat').value) || 1;
+  const G = parseFloat(document.getElementById('genome').value) || 1;
   const depths = [0.5, 1, 2, 5, 10, 20, 50];
   const abundances = [0.0001, 0.0005, 0.001, 0.01, 0.025, 0.05, 0.1, 0.15, 0.2];
 
@@ -652,8 +645,8 @@ function computeCoverage() {
 
 function computeRequiredDepth() {
   const C_raw = document.getElementById('targetCoverage').value;
-  const A_raw = document.getElementById('abundance2').value;
-  const G_raw = document.getElementById('genome2').value;
+  const A_raw = document.getElementById('abundance').value;
+  const G_raw = document.getElementById('genome').value;
 
   if (!C_raw || !A_raw || !G_raw) {
     document.getElementById('depthResult').innerText =
@@ -679,8 +672,8 @@ function computeRequiredDepth() {
 
 function computeRequiredRA() {
   const C_raw = document.getElementById('targetCoverageRA').value;
-  const G_raw = document.getElementById('genomeRA').value;
-  const D_raw = document.getElementById('depthRA').value;
+  const G_raw = document.getElementById('genome').value;
+  const D_raw = document.getElementById('depth').value;
 
   if (!C_raw || !G_raw || !D_raw) {
     document.getElementById('raResult').innerText =
@@ -713,5 +706,6 @@ updateAll();
 
 </body>
 </html>
+
 
 
