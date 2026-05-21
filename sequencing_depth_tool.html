@@ -42,21 +42,6 @@
     background: #fafafa;
     font-size: 14px;
   }
-  .legend-title {
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  .legend-item {
-    display: flex;
-    align-items: center;
-    margin-top: 8px;
-  }
-  .legend-color {
-    width: 18px;
-    height: 18px;
-    margin-right: 8px;
-    border: 1px solid #666;
-  }
 
   .scroll-table {
     overflow-x: auto;
@@ -69,17 +54,11 @@
     font-weight: bold;
   }
 
-  /* ============================
-     MAG TABLE COLOR CODING
-     ============================ */
-  .mag-high { background-color: #b7f7b7; }      /* green */
-  .mag-moderate { background-color: #f7f7b7; }  /* yellow */
-  .mag-low { background-color: #f7d3b7; }       /* orange */
-  .mag-unlikely { background-color: #f2b7b7; }  /* red */
+  .mag-high { background-color: #b7f7b7; }
+  .mag-moderate { background-color: #f7f7b7; }
+  .mag-low { background-color: #f7d3b7; }
+  .mag-unlikely { background-color: #f2b7b7; }
 
-  /* ============================
-     MAG LEGEND
-     ============================ */
   .mag-legend-box {
     margin-top: 10px;
     padding: 12px;
@@ -98,6 +77,12 @@
     margin-right: 8px;
     border: 1px solid #666;
   }
+
+  .explain {
+    font-size: 14px;
+    margin-top: 6px;
+    color: #444;
+  }
 </style>
 </head>
 
@@ -114,33 +99,41 @@
 
   <label>
     Relative abundance (%):
-    <input id="abundance" type="number" value="1" step="0.01" oninput="updateAll()">
+    <input id="abundance" type="number" value="1" step="0.01">
+    <input type="checkbox" id="use_abundance" checked> Use this value
   </label>
 
   <label>
     Genome size (Mb):
-    <input id="genome" type="number" value="4" step="0.1" oninput="updateAll()">
+    <input id="genome" type="number" value="4" step="0.1">
+    <input type="checkbox" id="use_genome" checked> Use this value
   </label>
 
   <label>
     Sequencing depth (Gb):
-    <input id="depth" type="number" value="10" step="0.1" oninput="updateAll()">
+    <input id="depth" type="number" value="10" step="0.1">
+    <input type="checkbox" id="use_depth" checked> Use this value
   </label>
 
   <label>
     Target coverage for depth calculator (×):
     <input id="targetCoverage" type="number" value="10" step="0.1">
+    <input type="checkbox" id="use_targetCoverage" checked> Use this value
   </label>
 
   <label>
     Target coverage for minimum RA (×):
     <input id="targetCoverageRA" type="number" value="5" step="0.1">
+    <input type="checkbox" id="use_targetCoverageRA" checked> Use this value
   </label>
 
   <label>
     DNA Quantity (ng):
-    <input id="dnaInput" type="number" value="10" step="0.1" oninput="updateAll()">
+    <input id="dnaInput" type="number" value="10" step="0.1">
+    <input type="checkbox" id="use_dna" checked> Use this value
   </label>
+
+  <button onclick="generateAll()">Generate All Results</button>
 
 </div>
 
@@ -149,25 +142,27 @@
      ============================ -->
 <h2>Coverage From Sequencing Depth</h2>
 
-<button onclick="computeCoverage()">Compute Coverage</button>
-
 <p id="coverageResult" style="font-weight:bold;"></p>
+
+<p class="explain">
+This section uses relative abundance, genome size, sequencing depth, and DNA quantity.  
+Coverage represents how many times each base of the genome is sequenced on average.  
+Higher coverage increases confidence in detection, reduces false negatives, and improves assembly quality.  
+DNA quantity acts as a cap on effective sequencing depth, limiting achievable coverage regardless of nominal depth.
+</p>
 
 <!-- ============================
      REQUIRED DEPTH CALCULATOR
      ============================ -->
 <h2>Required Sequencing Depth for Target Coverage</h2>
 
-<button onclick="computeRequiredDepth()">Compute Required Depth</button>
-
 <p id="depthResult" style="font-weight:bold;"></p>
 
-<!-- ============================
-     DNA QUANTITY (DISPLAY ONLY)
-     ============================ -->
-<h2>DNA Quantity</h2>
-<p style="font-size:14px;">
-  DNA quantity (ng) is set in the input panel above and is used as a cap on effective sequencing depth.
+<p class="explain">
+This section uses target coverage, relative abundance, genome size, and DNA quantity.  
+It calculates how much sequencing is needed to reach a desired coverage level for a given organism.  
+Lower abundance organisms require disproportionately more sequencing to reach the same coverage.  
+DNA quantity limits the maximum achievable depth, so extremely high target coverage may be impossible.
 </p>
 
 <!-- ============================
@@ -176,7 +171,7 @@
 <h2>Cheat Sheet: Coverage Across Depths and Relative Abundances</h2>
 
 <p style="font-size:14px;">
-  The cheat sheet uses the genome size (Mb) from the input panel above.
+  Cheat sheet values are automatically adjusted based on the DNA quantity entered above.
 </p>
 
 <div class="scroll-table">
@@ -199,6 +194,13 @@
     <tbody></tbody>
   </table>
 </div>
+
+<p class="explain">
+This section uses genome size, DNA quantity, and a range of depths and abundances.  
+It provides a quick reference for expected coverage across common sequencing depths and microbial abundances.  
+Coverage values help determine whether taxonomic profiling, functional profiling, or MAG recovery is feasible.  
+DNA quantity limits the effective depth, so deeper sequencing may not increase coverage if DNA is limiting.
+</p>
 
 <!-- ============================
      LEGEND
@@ -244,11 +246,11 @@
   </tr>
 </table>
 
-<p style="font-size:14px; margin-top:8px;">
-  <em>Note:</em> These thresholds assume human‑gut genome sizes (2–3.5 Mbp).  
-  Rumen microbiomes typically have larger genomes and higher community complexity,  
-  so achieving equivalent taxonomic and functional resolution generally requires  
-  <strong>higher sequencing depth</strong>.
+<p class="explain">
+This table uses fixed genome sizes and typical coverage thresholds.  
+It summarizes what biological insights become possible at different sequencing depths.  
+Lower depths support taxonomic profiling, while higher depths enable functional profiling and rare gene detection.  
+Genome size influences coverage, so organisms with larger genomes require more sequencing to reach the same resolution.
 </p>
 
 <!-- ============================
@@ -296,10 +298,11 @@
   </div>
 </div>
 
-<p style="font-size:14px; margin-top:8px;">
-  <em>Note:</em> MAG thresholds assume human‑gut genome sizes (~3.5 Mbp).  
-  Rumen microbiomes typically have larger genomes and higher strain‑level diversity,  
-  so MAG recovery at the same depth is generally <strong>more difficult</strong>.
+<p class="explain">
+This section uses sequencing depth, relative abundance, genome size, and DNA quantity.  
+MAG recovery requires extremely high coverage, so only abundant organisms at high sequencing depths reach the threshold.  
+Low-abundance organisms require disproportionately more sequencing to assemble complete genomes.  
+DNA quantity limits the effective depth, reducing MAG recovery potential even when nominal depth is high.
 </p>
 
 <!-- ============================
@@ -307,14 +310,20 @@
      ============================ -->
 <h2>Minimum Relative Abundance Required</h2>
 
-<button onclick="computeRequiredRA()">Compute Minimum RA</button>
-
 <p id="raResult" style="font-weight:bold;"></p>
+
+<p class="explain">
+This section uses target coverage, genome size, sequencing depth, and DNA quantity.  
+It determines the minimum abundance at which an organism can be detected or assembled at a desired coverage.  
+Lower sequencing depth or larger genome size increases the required abundance.  
+DNA quantity limits the effective depth, raising the minimum abundance needed for detection.
+</p>
 
 <!-- ============================
      EXPLANATION & REFERENCES BOX
      ============================ -->
 <div style="margin-top:40px; padding:20px; border:2px solid #888; background:#f7f7f7;">
+
   <h2>How These Calculations Work</h2>
 
   <p><strong>1. Bases sequenced for the species</strong><br>
@@ -355,7 +364,6 @@ Required depth (Gb) = (Coverage × G) / (1000 × A)
   </pre>
 
   <p>This is commonly used in metagenomic sampling‑depth calculations for MAG recovery.</p>
-
 
   <!-- ============================
        GROUPED REFERENCES
@@ -493,7 +501,13 @@ Required depth (Gb) = (Coverage × G) / (1000 × A)
    DNA QUANTITY CAP
    ============================================================ */
 function getDnaCapGbp() {
-  const dna_ng = parseFloat(document.getElementById('dnaInput').value) || 0;
+  const useDna = document.getElementById('use_dna').checked;
+  const dna_ng_raw = document.getElementById('dnaInput').value;
+  if (!useDna || dna_ng_raw === "") {
+    // No DNA cap applied if user chose not to use DNA quantity
+    return Infinity;
+  }
+  const dna_ng = parseFloat(dna_ng_raw) || 0;
   return dna_ng;
 }
 
@@ -507,12 +521,12 @@ function getEffectiveDepth(D_raw) {
    ============================================================ */
 function updateLegend() {
   document.getElementById("legendBox").innerHTML = `
-    <div class="legend-title">Coverage Tiers</div>
-    <div class="legend-item"><div class="legend-color" style="background:#e3d7ff;"></div>Ideal for Taxonomic Profiling</div>
-    <div class="legend-item"><div class="legend-color" style="background:#d0ecff;"></div>Ideal for Functional Profiling</div>
-    <div class="legend-item"><div class="legend-color" style="background:#bfe8ff;"></div>Ideal for High‑Resolution Functional Profiling</div>
-    <div class="legend-item"><div class="legend-color" style="background:#ffe2cc;"></div>Ideal for MAG Creation</div>
-    <div class="legend-item"><div class="legend-color" style="background:#ffffff;"></div>Below Recommended Threshold</div>
+    <div class="legend-title"><strong>Coverage Tiers</strong></div>
+    <div class="legend-item"><span style="display:inline-block;width:18px;height:18px;background:#e3d7ff;border:1px solid #666;margin-right:6px;"></span>Ideal for Taxonomic Profiling</div>
+    <div class="legend-item"><span style="display:inline-block;width:18px;height:18px;background:#d0ecff;border:1px solid #666;margin-right:6px;"></span>Ideal for Functional Profiling</div>
+    <div class="legend-item"><span style="display:inline-block;width:18px;height:18px;background:#bfe8ff;border:1px solid #666;margin-right:6px;"></span>Ideal for High‑Resolution Functional Profiling</div>
+    <div class="legend-item"><span style="display:inline-block;width:18px;height:18px;background:#ffe2cc;border:1px solid #666;margin-right:6px;"></span>Ideal for MAG Creation</div>
+    <div class="legend-item"><span style="display:inline-block;width:18px;height:18px;background:#ffffff;border:1px solid #666;margin-right:6px;"></span>Below Recommended Threshold</div>
   `;
 }
 
@@ -540,12 +554,25 @@ function getColorClass(cov) {
    CHEAT SHEET
    ============================================================ */
 function updateCheatSheet() {
-  const G = parseFloat(document.getElementById('genome').value) || 1;
-  const depths = [0.5, 1, 2, 5, 10, 20, 50];
-  const abundances = [0.0001, 0.0005, 0.001, 0.01, 0.025, 0.05, 0.1, 0.15, 0.2];
+  const useGenome = document.getElementById('use_genome').checked;
+  const G_raw = document.getElementById('genome').value;
 
   const tbody = document.querySelector('#cheatTable tbody');
   tbody.innerHTML = "";
+
+  if (!useGenome || G_raw === "") {
+    const row = document.createElement('tr');
+    const cell = document.createElement('td');
+    cell.colSpan = 10;
+    cell.textContent = "Cannot generate cheat sheet — Genome size (Mb) is disabled or missing.";
+    row.appendChild(cell);
+    tbody.appendChild(row);
+    return;
+  }
+
+  const G = parseFloat(G_raw) || 1;
+  const depths = [0.5, 1, 2, 5, 10, 20, 50];
+  const abundances = [0.0001, 0.0005, 0.001, 0.01, 0.025, 0.05, 0.1, 0.15, 0.2];
 
   depths.forEach(D_raw => {
     const row = document.createElement('tr');
@@ -622,13 +649,23 @@ function updateMagTable() {
    CALCULATORS
    ============================================================ */
 function computeCoverage() {
+  const useA = document.getElementById('use_abundance').checked;
+  const useG = document.getElementById('use_genome').checked;
+  const useD = document.getElementById('use_depth').checked;
+
   const A_raw = document.getElementById('abundance').value;
   const G_raw = document.getElementById('genome').value;
   const D_raw = document.getElementById('depth').value;
 
-  if (!A_raw || !G_raw || !D_raw) {
+  if (!useA || !useG || !useD) {
     document.getElementById('coverageResult').innerText =
-      "Please enter relative abundance, genome size, and sequencing depth first.";
+      "Cannot compute coverage — please enable and enter relative abundance, genome size, and sequencing depth.";
+    return;
+  }
+
+  if (A_raw === "" || G_raw === "" || D_raw === "") {
+    document.getElementById('coverageResult').innerText =
+      "Missing required input: relative abundance, genome size, or sequencing depth.";
     return;
   }
 
@@ -644,13 +681,23 @@ function computeCoverage() {
 }
 
 function computeRequiredDepth() {
+  const useC = document.getElementById('use_targetCoverage').checked;
+  const useA = document.getElementById('use_abundance').checked;
+  const useG = document.getElementById('use_genome').checked;
+
   const C_raw = document.getElementById('targetCoverage').value;
   const A_raw = document.getElementById('abundance').value;
   const G_raw = document.getElementById('genome').value;
 
-  if (!C_raw || !A_raw || !G_raw) {
+  if (!useC || !useA || !useG) {
     document.getElementById('depthResult').innerText =
-      "Please enter target coverage, relative abundance, and genome size first.";
+      "Cannot compute required depth — please enable and enter target coverage, relative abundance, and genome size.";
+    return;
+  }
+
+  if (C_raw === "" || A_raw === "" || G_raw === "") {
+    document.getElementById('depthResult').innerText =
+      "Missing required input: target coverage, relative abundance, or genome size.";
     return;
   }
 
@@ -662,8 +709,13 @@ function computeRequiredDepth() {
   const needed = (C * G) / (1000 * A);
 
   if (needed > dnaCap) {
-    document.getElementById('depthResult').innerText =
-      `Required depth: ${needed.toFixed(2)} Gb (IMPOSSIBLE — DNA‑limited; cap = ${dnaCap.toFixed(2)} Gb)`;
+    if (dnaCap === Infinity) {
+      document.getElementById('depthResult').innerText =
+        `Required depth: ${needed.toFixed(2)} Gb (no DNA quantity cap applied).`;
+    } else {
+      document.getElementById('depthResult').innerText =
+        `Required depth: ${needed.toFixed(2)} Gb (IMPOSSIBLE — DNA‑limited; cap = ${dnaCap.toFixed(2)} Gb).`;
+    }
   } else {
     document.getElementById('depthResult').innerText =
       `Required depth (DNA‑quantity adjusted): ${needed.toFixed(2)} Gb`;
@@ -671,13 +723,23 @@ function computeRequiredDepth() {
 }
 
 function computeRequiredRA() {
+  const useC = document.getElementById('use_targetCoverageRA').checked;
+  const useG = document.getElementById('use_genome').checked;
+  const useD = document.getElementById('use_depth').checked;
+
   const C_raw = document.getElementById('targetCoverageRA').value;
   const G_raw = document.getElementById('genome').value;
   const D_raw = document.getElementById('depth').value;
 
-  if (!C_raw || !G_raw || !D_raw) {
+  if (!useC || !useG || !useD) {
     document.getElementById('raResult').innerText =
-      "Please enter target coverage, genome size, and sequencing depth first.";
+      "Cannot compute minimum RA — please enable and enter target coverage, genome size, and sequencing depth.";
+    return;
+  }
+
+  if (C_raw === "" || G_raw === "" || D_raw === "") {
+    document.getElementById('raResult').innerText =
+      "Missing required input: target coverage, genome size, or sequencing depth.";
     return;
   }
 
@@ -693,15 +755,19 @@ function computeRequiredRA() {
 }
 
 /* ============================================================
-   UPDATE EVERYTHING
+   GENERATE ALL
    ============================================================ */
-function updateAll() {
+function generateAll() {
   updateLegend();
   updateCheatSheet();
   updateMagTable();
+  computeCoverage();
+  computeRequiredDepth();
+  computeRequiredRA();
 }
 
-updateAll();
+/* Initial generation on load */
+window.onload = generateAll;
 </script>
 
 </body>
