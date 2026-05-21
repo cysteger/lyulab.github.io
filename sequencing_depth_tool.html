@@ -600,22 +600,24 @@ function updateMagTable() {
 
     abundances.forEach(a => {
       const cov = (effective * 1000 * a.val) / G;
+      let status = "";
       const cell = document.createElement("td");
 
       if (cov >= MAG_THRESHOLD) {
-        cell.textContent = "High MAG recovery";
+        status = "High MAG recovery";
         cell.className = "mag-high";
       } else if (cov >= MAG_THRESHOLD * 0.5) {
-        cell.textContent = "Moderate";
+        status = "Moderate";
         cell.className = "mag-moderate";
       } else if (cov >= MAG_THRESHOLD * 0.1) {
-        cell.textContent = "Low";
+        status = "Low";
         cell.className = "mag-low";
       } else {
-        cell.textContent = "Unlikely";
+        status = "Unlikely";
         cell.className = "mag-unlikely";
       }
 
+      cell.textContent = status;
       row.appendChild(cell);
     });
 
@@ -627,11 +629,21 @@ function updateMagTable() {
    CALCULATORS
    ============================================================ */
 function computeCoverage() {
-  const A = parseFloat(document.getElementById('abundance').value) / 100;
-  const G = parseFloat(document.getElementById('genome').value) || 1;
-  const D_raw = parseFloat(document.getElementById('depth').value) || 0;
+  const A_raw = document.getElementById('abundance').value;
+  const G_raw = document.getElementById('genome').value;
+  const D_raw = document.getElementById('depth').value;
 
-  const effective = getEffectiveDepth(D_raw);
+  if (!A_raw || !G_raw || !D_raw) {
+    document.getElementById('coverageResult').innerText =
+      "Please enter relative abundance, genome size, and sequencing depth first.";
+    return;
+  }
+
+  const A = parseFloat(A_raw) / 100;
+  const G = parseFloat(G_raw);
+  const D = parseFloat(D_raw);
+
+  const effective = getEffectiveDepth(D);
   const cov = (effective * 1000 * A) / G;
 
   document.getElementById('coverageResult').innerText =
@@ -639,9 +651,19 @@ function computeCoverage() {
 }
 
 function computeRequiredDepth() {
-  const C = parseFloat(document.getElementById('targetCoverage').value);
-  const A = parseFloat(document.getElementById('abundance2').value) / 100;
-  const G = parseFloat(document.getElementById('genome2').value);
+  const C_raw = document.getElementById('targetCoverage').value;
+  const A_raw = document.getElementById('abundance2').value;
+  const G_raw = document.getElementById('genome2').value;
+
+  if (!C_raw || !A_raw || !G_raw) {
+    document.getElementById('depthResult').innerText =
+      "Please enter target coverage, relative abundance, and genome size first.";
+    return;
+  }
+
+  const C = parseFloat(C_raw);
+  const A = parseFloat(A_raw) / 100;
+  const G = parseFloat(G_raw);
 
   const dnaCap = getDnaCapGbp();
   const needed = (C * G) / (1000 * A);
@@ -656,11 +678,21 @@ function computeRequiredDepth() {
 }
 
 function computeRequiredRA() {
-  const C = parseFloat(document.getElementById('targetCoverageRA').value);
-  const G = parseFloat(document.getElementById('genomeRA').value);
-  const D_raw = parseFloat(document.getElementById('depthRA').value);
+  const C_raw = document.getElementById('targetCoverageRA').value;
+  const G_raw = document.getElementById('genomeRA').value;
+  const D_raw = document.getElementById('depthRA').value;
 
-  const effective = getEffectiveDepth(D_raw);
+  if (!C_raw || !G_raw || !D_raw) {
+    document.getElementById('raResult').innerText =
+      "Please enter target coverage, genome size, and sequencing depth first.";
+    return;
+  }
+
+  const C = parseFloat(C_raw);
+  const G = parseFloat(G_raw);
+  const D = parseFloat(D_raw);
+
+  const effective = getEffectiveDepth(D);
   const A = (C * G) / (1000 * effective);
 
   document.getElementById('raResult').innerText =
@@ -681,4 +713,5 @@ updateAll();
 
 </body>
 </html>
+
 
