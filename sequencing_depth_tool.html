@@ -4,13 +4,6 @@
 <meta charset="UTF-8">
 <title>Meta-CD: Metagenomic Sequencing Coverage and Depth Calculator</title>
 
-<p style="font-size:16px; margin-top:10px;">
-  This tool is designed for species‑specific metagenomic evaluation (post sequencing and community processing), 
-  allowing researchers to estimate the sequencing coverage, required depth, minimum detectable abundance, and 
-  MAG recovery potential for an individual microbial species; based on its genome size, relative abundance, 
-  sequencing depth, and sample DNA quantity.
-</p>
-
 <style>
   body {
     font-family: Arial, sans-serif;
@@ -49,6 +42,21 @@
     background: #fafafa;
     font-size: 14px;
   }
+  .legend-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  .legend-item {
+    display: flex;
+    align-items: center;
+    margin-top: 8px;
+  }
+  .legend-color {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    border: 1px solid #666;
+  }
 
   .scroll-table {
     overflow-x: auto;
@@ -61,11 +69,17 @@
     font-weight: bold;
   }
 
-  .mag-high { background-color: #b7f7b7; }
-  .mag-moderate { background-color: #f7f7b7; }
-  .mag-low { background-color: #f7d3b7; }
-  .mag-unlikely { background-color: #f2b7b7; }
+  /* ============================
+     MAG TABLE COLOR CODING
+     ============================ */
+  .mag-high { background-color: #b7f7b7; }      /* green */
+  .mag-moderate { background-color: #f7f7b7; }  /* yellow */
+  .mag-low { background-color: #f7d3b7; }       /* orange */
+  .mag-unlikely { background-color: #f2b7b7; }  /* red */
 
+  /* ============================
+     MAG LEGEND
+     ============================ */
   .mag-legend-box {
     margin-top: 10px;
     padding: 12px;
@@ -84,14 +98,20 @@
     margin-right: 8px;
     border: 1px solid #666;
   }
-
-  .explain {
-    font-size: 14px;
-    margin-top: 6px;
-    color: #444;
-  }
 </style>
 </head>
+
+<body>
+
+<h1>Meta-CD: Metagenomic Sequencing Coverage and Depth Calculator</h1>
+
+<p style="font-size:16px; margin-top:10px;">
+  This tool is designed for species‑specific metagenomic evaluation (post sequencing and community processing),
+  allowing researchers to estimate the sequencing coverage, required depth, minimum detectable abundance, and
+  MAG recovery potential for an individual microbial species; based on its genome size, relative abundance,
+  sequencing depth, and sample DNA quantity.
+</p>
+
 
 <body>
 
