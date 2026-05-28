@@ -146,9 +146,15 @@
     <input type="checkbox" id="use_targetCoverage" checked> Use this value
   </label>
 
-  <label>
-    Target coverage for minimum RA (×):
-    <input id="targetCoverageRA" type="number" value="5" step="0.1">
+  <label for="minRAcoverage">Target coverage for minimum RA (×):
+      <select id="minRAcoverage" style="width: 250px; padding: 5px;">
+        <option value="1">1× — Minimal evidence of presence</option>
+        <option value="3">3× — Low-confidence detection</option>
+        <option value="5">5× — Common minimum RA threshold</option>
+        <option value="10" selected>10× — High-confidence detection (recommended)</option>
+        <option value="20">20× — Reliable detection + basic variant calling</option>
+        <option value="30">30× — High-confidence variant calling</option>
+    </select>
     <input type="checkbox" id="use_targetCoverageRA" checked> Use this value
   </label>
 
@@ -161,6 +167,19 @@
   <button onclick="generateAll()">Generate All Results</button>
 
 </div>
+
+<div style="margin-top:15px; padding:15px; background:#f3f3f3; border:1px solid #ccc; font-size:14px;">
+  <strong>What these inputs mean:</strong>
+  <ul>
+    <li><strong>Relative abundance (%):</strong> The proportion of total metagenomic reads belonging to the species of interest after community processing.</li>
+    <li><strong>Genome size (Mb):</strong> The genome length of the species you are evaluating, in megabases.</li>
+    <li><strong>Sequencing depth (Gb):</strong> The total sequencing generated for the entire sample (community-level depth).</li>
+    <li><strong>Target coverage (×):</strong> The desired sequencing coverage for this species; used to calculate required depth.</li>
+    <li><strong>Target coverage for minimum RA (×):</strong> The coverage threshold used to compute the minimum detectable relative abundance.</li>
+    <li><strong>DNA quantity (ng):</strong> Total DNA extracted from the sample; limits the maximum effective sequencing depth.</li>
+  </ul>
+</div>
+
 
 <!-- ============================
      COVERAGE FROM DEPTH
@@ -748,11 +767,11 @@ function computeRequiredDepth() {
 }
 
 function computeRequiredRA() {
-  const useC = document.getElementById('use_targetCoverageRA').checked;
+  const useC = document.getElementById('use_minRAcoverage').checked;
   const useG = document.getElementById('use_genome').checked;
   const useD = document.getElementById('use_depth').checked;
 
-  const C_raw = document.getElementById('targetCoverageRA').value;
+  const C_raw = document.getElementById('minRAcoverage').value;
   const G_raw = document.getElementById('genome').value;
   const D_raw = document.getElementById('depth').value;
 
