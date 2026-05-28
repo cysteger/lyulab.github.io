@@ -112,9 +112,6 @@
   sequencing depth, and sample DNA quantity.
 </p>
 
-
-<body>
-
 <!-- ============================
      UNIFIED INPUT PANEL
      ============================ -->
@@ -730,14 +727,14 @@ function computeCoverage() {
   if (!useA || !useG || !useD) {
     document.getElementById('coverageResult').innerText =
       "Cannot compute coverage — please enable and enter relative abundance, genome size, and sequencing depth.";
-    document.getElementById('speciesBasesResult').innerText = "";
+    document.getElementById('speciesBases').innerText = "";
     return;
   }
 
   if (A_raw === "" || G_raw === "" || D_raw === "") {
     document.getElementById('coverageResult').innerText =
       "Missing required input: relative abundance, genome size, or sequencing depth.";
-    document.getElementById('speciesBasesResult').innerText = "";
+    document.getElementById('speciesBases').innerText = "";
     return;
   }
 
@@ -751,14 +748,9 @@ function computeCoverage() {
   document.getElementById('coverageResult').innerText =
     `Estimated coverage (DNA‑quantity adjusted): ${cov.toFixed(2)}×`;
 
-  /* ============================================================
-     NEW: BASES SEQUENCED FOR THIS SPECIES
-     ============================================================ */
-
-  // Species bases = D × 1e9 × A
+  // ===== Bases sequenced for this species =====
   const speciesBases = D * 1e9 * A;
 
-  // Format nicely
   let formattedBases;
   if (speciesBases >= 1e9) {
     formattedBases = (speciesBases / 1e9).toFixed(2) + " Gb";
@@ -768,9 +760,10 @@ function computeCoverage() {
     formattedBases = speciesBases.toFixed(0) + " bases";
   }
 
-  document.getElementById('speciesBasesResult').innerText =
+  document.getElementById('speciesBases').innerText =
     `Bases sequenced for this species: ${formattedBases}`;
 }
+
 function computeRequiredDepth() {
   const useC = document.getElementById('use_targetCoverage').checked;
   const useA = document.getElementById('use_abundance').checked;
