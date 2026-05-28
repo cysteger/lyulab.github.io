@@ -146,17 +146,14 @@
     <input type="checkbox" id="use_targetCoverage" checked> Use this value
   </label>
 
- <label for="minRAcoverage" style="display:flex; align-items:center; gap:8px;">
-  Target coverage for minimum RA (×)
-    <button type="button" id="minRAinfo" 
-            style="padding:2px 6px; font-size:12px; cursor:pointer;">?</button>
-    <select id="minRAcoverage" style="width: 120px; padding: 5px;">
-      <option value="1">1×</option>
-      <option value="3">3×</option>
-      <option value="5">5×</option>
-      <option value="10" selected>10×</option>
-      <option value="20">20×</option>
-      <option value="30">30×</option>
+  <label for="minRAcoverage">Target coverage for minimum RA (×):
+      <select id="minRAcoverage" style="width: 250px; padding: 5px;">
+        <option value="1">1× — Minimal evidence of presence</option>
+        <option value="3">3× — Low-confidence detection</option>
+        <option value="5">5× — Common minimum RA threshold</option>
+        <option value="10" selected>10× — High-confidence detection (recommended)</option>
+        <option value="20">20× — Reliable detection + basic variant calling</option>
+        <option value="30">30× — High-confidence variant calling</option>
     </select>
     <input type="checkbox" id="use_targetCoverageRA" checked> Use this value
   </label>
@@ -815,38 +812,9 @@ function generateAll() {
 
 /* Initial generation on load */
 window.onload = generateAll;
-
-<div id="minRApopup" 
-     style="display:none; position:fixed; top:20%; left:50%; transform:translateX(-50%);
-            background:white; border:1px solid #888; padding:20px; width:350px; 
-            box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:9999;">
-
-  <h3>Coverage Thresholds Explained</h3>
-  <ul style="font-size:14px; line-height:1.4;">
-    <li><strong>1×</strong> — Minimal evidence of presence; very permissive.</li>
-    <li><strong>3×</strong> — Low-confidence detection; weak presence/absence.</li>
-    <li><strong>5×</strong> — Common minimum RA threshold; moderate confidence.</li>
-    <li><strong>10×</strong> — High-confidence detection; recommended default.</li>
-    <li><strong>20×</strong> — Reliable detection + basic variant calling.</li>
-    <li><strong>30×</strong> — High-confidence variant calling; strain-level work.</li>
-  </ul>
-
-  <button id="closeMinRApopup" 
-          style="margin-top:10px; padding:5px 10px; cursor:pointer;">Close</button>
-</div>
-
-document.getElementById("minRAinfo").onclick = function() {
-  document.getElementById("minRApopup").style.display = "block";
-};
-
-document.getElementById("closeMinRApopup").onclick = function() {
-  document.getElementById("minRApopup").style.display = "none";
-};
-
 </script>
- 
+
 </body>
 </html>
-
 
 
