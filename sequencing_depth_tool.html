@@ -5,103 +5,258 @@
 <title>Meta-CD: Metagenomic Sequencing Coverage and Depth Calculator</title>
 
 <style>
-  body {
-    font-family: Arial, sans-serif;
-    margin: 40px;
-    max-width: 900px;
+  :root {
+    --bg-page: #f3f5f9;
+    --bg-card: #ffffff;
+    --border-card: #d4d9e2;
+    --accent: #2f6fde;
+    --accent-soft: #e3ecff;
+    --text-main: #1f2933;
+    --text-muted: #4b5563;
+    --shadow-soft: 0 2px 8px rgba(15, 23, 42, 0.08);
+    --radius-card: 10px;
   }
 
-  h1 { margin-bottom: 5px; }
-  h2 { margin-top: 40px; }
-  label { display: block; margin-top: 10px; }
-  input { width: 120px; padding: 5px; margin-left: 10px; }
-  button { margin-top: 15px; padding: 8px 14px; cursor: pointer; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    margin: 0;
+    padding: 40px 20px;
+    background: var(--bg-page);
+    color: var(--text-main);
+    display: flex;
+    justify-content: center;
+  }
 
-  table {
-    border-collapse: collapse;
-    margin-top: 20px;
+  .app-shell {
+    max-width: 1000px;
     width: 100%;
   }
+
+  h1 {
+    margin-bottom: 6px;
+    font-size: 28px;
+    font-weight: 700;
+  }
+
+  h2 {
+    margin-top: 32px;
+    margin-bottom: 10px;
+    font-size: 22px;
+    font-weight: 650;
+    color: var(--text-main);
+  }
+
+  h3 {
+    margin-top: 20px;
+    margin-bottom: 8px;
+    font-size: 18px;
+  }
+
+  p {
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  /* Section cards */
+  .section-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-card);
+    padding: 20px 22px;
+    margin-top: 24px;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .section-title {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 20px;
+    font-weight: 650;
+    margin-bottom: 14px;
+  }
+
+  .section-title span.icon {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: var(--accent-soft);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--accent);
+    font-size: 16px;
+  }
+
+  /* Input panel */
+  .input-panel {
+    background: var(--bg-card);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-card);
+    padding: 20px 22px;
+    box-shadow: var(--shadow-soft);
+    margin-top: 18px;
+  }
+
+  .input-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px 26px;
+  }
+
+  .input-field {
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+    color: var(--text-main);
+  }
+
+  .input-label-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 6px;
+    margin-bottom: 4px;
+  }
+
+  .input-label-row span.main-label {
+    font-weight: 600;
+  }
+
+  .input-label-row span.helper {
+    font-size: 11px;
+    color: var(--text-muted);
+  }
+
+  .input-inline {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  input[type="number"],
+  select {
+    width: 120px;
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid #cbd2e1;
+    font-size: 14px;
+  }
+
+  input[type="checkbox"] {
+    transform: scale(0.95);
+  }
+
+  button {
+    background: var(--accent);
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 9px 16px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 16px;
+    transition: background 0.15s ease, transform 0.05s ease;
+  }
+
+  button:hover {
+    background: #2457b0;
+  }
+
+  button:active {
+    transform: translateY(1px);
+  }
+
+  /* Tables */
+  table {
+    border-collapse: collapse;
+    margin-top: 14px;
+    width: 100%;
+    background: #ffffff;
+    border-radius: 8px;
+    overflow: hidden;
+    font-size: 13px;
+  }
+
   th, td {
-    border: 1px solid #aaa;
-    padding: 6px;
+    border: 1px solid #d4d9e2;
+    padding: 6px 8px;
     text-align: center;
   }
-  th { background: #eee; }
 
+  th {
+    background: #eef1f7;
+    font-weight: 600;
+  }
+
+  .scroll-table {
+    overflow-x: auto;
+    margin-top: 10px;
+  }
+
+  .legend-box,
+  .mag-legend-box {
+    margin-top: 10px;
+    padding: 12px;
+    border: 1px solid #d4d9e2;
+    background: #f8fafc;
+    font-size: 13px;
+    border-radius: 8px;
+  }
+
+  .legend-title {
+    font-weight: 650;
+    margin-bottom: 8px;
+  }
+
+  .legend-item,
+  .mag-legend-item {
+    display: flex;
+    align-items: center;
+    margin-top: 6px;
+    color: var(--text-muted);
+  }
+
+  .legend-color,
+  .mag-legend-color {
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    border: 1px solid #666;
+    border-radius: 4px;
+  }
+
+  .explain {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-top: 6px;
+  }
+
+  /* Existing color classes preserved */
   .color-taxonomy { background-color: #e3d7ff; }
   .color-functional { background-color: #d0ecff; }
   .color-highres { background-color: #9EE7C9; }
   .color-mag { background-color: #ffe2cc; }
   .color-low { background-color: #ffffff; }
 
-  .legend-box {
-    margin-top: 10px;
-    padding: 12px;
-    border: 1px solid #aaa;
-    background: #fafafa;
-    font-size: 14px;
-  }
-  .legend-title {
-    font-weight: bold;
-    margin-bottom: 10px;
-  }
-  .legend-item {
-    display: flex;
-    align-items: center;
-    margin-top: 8px;
-  }
-  .legend-color {
-    width: 18px;
-    height: 18px;
-    margin-right: 8px;
-    border: 1px solid #666;
-  }
+  .mag-high { background-color: #b7f7b7; }
+  .mag-moderate { background-color: #f7f7b7; }
+  .mag-low { background-color: #f7d3b7; }
+  .mag-unlikely { background-color: #f2b7b7; }
 
-  .scroll-table {
-    overflow-x: auto;
-    margin-top: 15px;
-  }
-
-  .depth-cheatsheet caption {
-    margin-bottom: 10px;
-    font-size: 20px;
-    font-weight: bold;
-  }
-
-  /* ============================
-     MAG TABLE COLOR CODING
-     ============================ */
-  .mag-high { background-color: #b7f7b7; }      /* green */
-  .mag-moderate { background-color: #f7f7b7; }  /* yellow */
-  .mag-low { background-color: #f7d3b7; }       /* orange */
-  .mag-unlikely { background-color: #f2b7b7; }  /* red */
-
-  /* ============================
-     MAG LEGEND
-     ============================ */
-  .mag-legend-box {
-    margin-top: 10px;
-    padding: 12px;
-    border: 1px solid #aaa;
-    background: #fafafa;
-    font-size: 14px;
-  }
-  .mag-legend-item {
-    display: flex;
-    align-items: center;
-    margin-top: 6px;
-  }
-  .mag-legend-color {
-    width: 18px;
-    height: 18px;
-    margin-right: 8px;
-    border: 1px solid #666;
+  /* Popup */
+  #minRApopup {
+    border-radius: 10px;
+    font-size: 13px;
   }
 </style>
+
 </head>
 
 <body>
+  <div class="app-shell">
+
 
 <h1>Meta-CD: Metagenomic Sequencing Coverage and Depth Calculator</h1>
 
@@ -117,157 +272,188 @@
      ============================ -->
 <h2>Input Parameters</h2>
 
-<div style="padding:20px; border:1px solid #888; background:#f9f9f9; margin-bottom:30px;">
-
-  <label>
-    Relative abundance (%):
-    <input id="abundance" type="number" value="1" step="0.01">
-    <input type="checkbox" id="use_abundance" checked> Use this value
-  </label>
-
-  <label>
-    Genome size (Mb):
-    <input id="genome" type="number" value="4" step="0.1">
-    <input type="checkbox" id="use_genome" checked> Use this value
-  </label>
-
-  <label>
-    Sequencing depth (Gb):
-    <input id="depth" type="number" value="10" step="0.1">
-    <input type="checkbox" id="use_depth" checked> Use this value
-  </label>
-
-  <label>
-    Target coverage for depth calculator (×):
-    <input id="targetCoverage" type="number" value="10" step="0.1">
-    <input type="checkbox" id="use_targetCoverage" checked> Use this value
-  </label>
-
-  <label for="minRAcoverage">Target coverage for minimum RA (×):
-      <button type="button" id="minRAinfo" 
-          style="padding:2px 6px; font-size:12px; cursor:pointer;">?</button>
-      <select id="minRAcoverage" style="width: 250px; padding: 5px;">
-        <option value="1">1×</option>
-        <option value="3">3×</option>
-        <option value="5">5×</option>
-        <option value="10" selected>10×</option>
-        <option value="20">20×</option>
-        <option value="30">30×</option>
-      </select>
-    <input type="checkbox" id="use_minRAcoverage" checked>
-  </label>
-
-  <div id="minRApopup" 
-       style="display:none; position:fixed; top:20%; left:50%; transform:translateX(-50%);
-              background:white; border:1px solid #888; padding:20px; width:350px; 
-              box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:9999;">
-    <h3>Coverage Thresholds Explained</h3>
-    <ul style="font-size:14px; line-height:1.4;">
-      <li><strong>1×</strong> — Minimal evidence of presence; very permissive.</li>
-      <li><strong>3×</strong> — Low-confidence detection; weak presence/absence.</li>
-      <li><strong>5×</strong> — Common minimum RA threshold; moderate confidence.</li>
-      <li><strong>10×</strong> — High-confidence detection; recommended default.</li>
-      <li><strong>20×</strong> — Reliable detection + basic variant calling.</li>
-      <li><strong>30×</strong> — High-confidence variant calling; strain-level work.</li>
-    </ul>
-    <button id="closeMinRApopup" 
-            style="margin-top:10px; padding:5px 10px; cursor:pointer;">Close</button>
+<div class="input-panel">
+  <div class="section-title">
+    <span class="icon">⚙️</span>
+    <span>Input Parameters</span>
   </div>
 
-  <label>
-    DNA Quantity (ng):
-    <input id="dnaInput" type="number" value="10" step="0.1">
-    <input type="checkbox" id="use_dna" checked> Use this value
-  </label>
+  <div class="input-grid">
+
+    <div class="input-field">
+      <div class="input-label-row">
+        <span class="main-label">Relative abundance (%)</span>
+        <span class="helper">Post‑processing RA</span>
+      </div>
+      <div class="input-inline">
+        <input id="abundance" type="number" value="1" step="0.01">
+        <label><input type="checkbox" id="use_abundance" checked> Use</label>
+      </div>
+    </div>
+
+    <div class="input-field">
+      <div class="input-label-row">
+        <span class="main-label">Genome size (Mb)</span>
+        <span class="helper">Species genome length</span>
+      </div>
+      <div class="input-inline">
+        <input id="genome" type="number" value="4" step="0.1">
+        <label><input type="checkbox" id="use_genome" checked> Use</label>
+      </div>
+    </div>
+
+    <div class="input-field">
+      <div class="input-label-row">
+        <span class="main-label">Sequencing depth (Gb)</span>
+        <span class="helper">Community depth</span>
+      </div>
+      <div class="input-inline">
+        <input id="depth" type="number" value="10" step="0.1">
+        <label><input type="checkbox" id="use_depth" checked> Use</label>
+      </div>
+    </div>
+
+    <div class="input-field">
+      <div class="input-label-row">
+        <span class="main-label">Target coverage (×)</span>
+        <span class="helper">Depth calculator</span>
+      </div>
+      <div class="input-inline">
+        <input id="targetCoverage" type="number" value="10" step="0.1">
+        <label><input type="checkbox" id="use_targetCoverage" checked> Use</label>
+      </div>
+    </div>
+
+    <div class="input-field">
+      <div class="input-label-row">
+        <span class="main-label">Target coverage for minimum RA (×)</span>
+        <span class="helper">Detection threshold</span>
+      </div>
+      <div class="input-inline">
+        <select id="minRAcoverage">
+          <option value="1">1×</option>
+          <option value="3">3×</option>
+          <option value="5">5×</option>
+          <option value="10" selected>10×</option>
+          <option value="20">20×</option>
+          <option value="30">30×</option>
+        </select>
+        <button type="button" id="minRAinfo" style="margin-top:0; padding:4px 8px; font-size:12px;">?</button>
+        <label><input type="checkbox" id="use_minRAcoverage" checked> Use</label>
+      </div>
+    </div>
+
+    <div class="input-field">
+      <div class="input-label-row">
+        <span class="main-label">DNA quantity (ng)</span>
+        <span class="helper">Limits effective depth</span>
+      </div>
+      <div class="input-inline">
+        <input id="dnaInput" type="number" value="10" step="0.1">
+        <label><input type="checkbox" id="use_dna" checked> Use</label>
+      </div>
+    </div>
+
+  </div>
 
   <button onclick="generateAll()">Generate All Results</button>
-
-</div>
-
-<div style="margin-top:15px; padding:15px; background:#f3f3f3; border:1px solid #ccc; font-size:14px;">
-  <strong>What these inputs mean:</strong>
-  <ul>
-    <li><strong>Relative abundance (%):</strong> The proportion of total metagenomic reads belonging to the species of interest after community processing.</li>
-    <li><strong>Genome size (Mb):</strong> The genome length of the species you are evaluating, in megabases.</li>
-    <li><strong>Sequencing depth (Gb):</strong> The total sequencing generated for the entire sample (community-level depth).</li>
-    <li><strong>Target coverage (×):</strong> The desired sequencing coverage for this species; used to calculate required depth.</li>
-    <li><strong>Target coverage for minimum RA (×):</strong> The coverage threshold used to compute the minimum detectable relative abundance.</li>
-    <li><strong>DNA quantity (ng):</strong> Total DNA extracted from the sample; limits the maximum effective sequencing depth.</li>
-  </ul>
 </div>
 
 <!-- ============================
      BASES SEQUENCED FOR THIS SPECIES
      ============================ -->
-<h3>Bases Sequenced for This Species</h3>
-<p id="speciesBases" style="font-size:16px; margin-top:5px;">
-  <!-- JS will fill this in -->
-</p>
+<div class="section-card">
+  <div class="section-title">
+    <span class="icon">🧬</span>
+    <span>Bases Sequenced for This Species</span>
+  </div>
+
+  <p id="speciesBases"></p>
+</div>
+
   
 <!-- ============================
      COVERAGE FROM DEPTH
      ============================ -->
 <h2>Coverage From Sequencing Depth</h2>
 
-<p id="coverageResult" style="font-weight:bold;"></p>
+<div class="section-card">
+  <div class="section-title">
+    <span class="icon">📊</span>
+    <span>Coverage From Sequencing Depth</span>
+  </div>
 
-<p class="explain">
+  <p id="coverageResult" style="font-weight:bold;"></p>
+  <p class="explain">
 This section uses relative abundance, genome size, sequencing depth, and DNA quantity.  
 Coverage represents how many times each base of the genome is sequenced on average.  
 Higher coverage increases confidence in detection, reduces false negatives, and improves assembly quality.  
 DNA quantity acts as a cap on effective sequencing depth, limiting achievable coverage regardless of nominal depth.
-</p>
+  </p>
+</div>
+
+
 
 <!-- ============================
      REQUIRED DEPTH CALCULATOR
      ============================ -->
-<h2>Required Sequencing Depth for Target Coverage</h2>
+<div class="section-card">
+  <div class="section-title">
+    <span class="icon">📈</span>
+    <span>Required Sequencing Depth</span>
+  </div>
 
-<p id="depthResult" style="font-weight:bold;"></p>
-
-<p class="explain">
-This section uses target coverage, relative abundance, genome size, and DNA quantity.  
+  <p id="depthResult"></p>
+  <p class="explain">This section uses target coverage, relative abundance, genome size, and DNA quantity.  
 It calculates how much sequencing is needed to reach a desired coverage level for a given organism.  
 Lower abundance organisms require disproportionately more sequencing to reach the same coverage.  
-DNA quantity limits the maximum achievable depth, so extremely high target coverage may be impossible.
-</p>
+DNA quantity limits the maximum achievable depth, so extremely high target coverage may be impossible.</p>
+</div>
 
 <!-- ============================
      CHEAT SHEET
      ============================ -->
-<h2>Cheat Sheet: Coverage Across Depths and Relative Abundances</h2>
+<div class="section-card">
+  <div class="section-title">
+    <span class="icon">📘</span>
+    <span>Coverage Cheat Sheet</span>
+  </div>
 
-<p style="font-size:14px;">
-  Cheat sheet values are automatically adjusted based on the DNA quantity entered above.
-</p>
+  <p style="font-size:14px;">
+    Cheat sheet values are automatically adjusted based on the DNA quantity entered above.
+  </p>
 
-<div class="scroll-table">
-  <table id="cheatTable">
-    <caption><strong>Coverage Cheat Sheet (Depth × Relative Abundance)</strong></caption>
-    <thead>
-      <tr>
-        <th>Depth (Gb)</th>
-        <th>RA 0.01%</th>
-        <th>RA 0.05%</th>
-        <th>RA 0.1%</th>
-        <th>RA 1%</th>
-        <th>RA 2.5%</th>
-        <th>RA 5%</th>
-        <th>RA 10%</th>
-        <th>RA 15%</th>
-        <th>RA 20%</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+  <div class="scroll-table">
+    <table id="cheatTable">
+      <caption><strong>Coverage Cheat Sheet (Depth × Relative Abundance)</strong></caption>
+      <thead>
+        <tr>
+          <th>Depth (Gb)</th>
+          <th>RA 0.01%</th>
+          <th>RA 0.05%</th>
+          <th>RA 0.1%</th>
+          <th>RA 1%</th>
+          <th>RA 2.5%</th>
+          <th>RA 5%</th>
+          <th>RA 10%</th>
+          <th>RA 15%</th>
+          <th>RA 20%</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+
+  <p class="explain">
+    This section uses genome size, DNA quantity, and a range of depths and abundances.
+    It provides a quick reference for expected coverage across common sequencing depths and microbial abundances.
+    Coverage values help determine whether taxonomic profiling, functional profiling, or MAG recovery is feasible.
+    DNA quantity limits the effective depth, so deeper sequencing may not increase coverage if DNA is limiting.
+  </p>
+
+  <div id="legendBox" class="legend-box"></div>
 </div>
 
-<p class="explain">
-This section uses genome size, DNA quantity, and a range of depths and abundances.  
-It provides a quick reference for expected coverage across common sequencing depths and microbial abundances.  
-Coverage values help determine whether taxonomic profiling, functional profiling, or MAG recovery is feasible.  
-DNA quantity limits the effective depth, so deeper sequencing may not increase coverage if DNA is limiting.
-</p>
 
 <!-- ============================
      LEGEND
@@ -277,121 +463,133 @@ DNA quantity limits the effective depth, so deeper sequencing may not increase c
 <!-- ============================
      TABLE 1 — TAXONOMIC + FUNCTIONAL PROFILING
      ============================ -->
-<table class="depth-cheatsheet">
-  <caption><strong>Recommended Sequencing Depths for Taxonomic and Functional Profiling</strong></caption>
+<div class="section-card">
+  <div class="section-title">
+    <span class="icon">🧱</span>
+    <span>MAG Recovery Potential</span>
+  </div>
 
-  <tr>
-    <th>Depth (Gbp)</th>
-    <th>Use Case</th>
-    <th>Coverage (2 Mbp genome)</th>
-    <th>Coverage (3.5 Mbp genome)</th>
-    <th>Analytical Capabilities</th>
-  </tr>
+  <table class="depth-cheatsheet">
+    <caption><strong>Recommended Sequencing Depths for Taxonomic and Functional Profiling</strong></caption>
 
-  <tr class="color-taxonomy">
-    <td>0.5–2 Gbp</td>
-    <td><strong>Taxonomic Profiling</strong></td>
-    <td>~250×</td>
-    <td>~140×</td>
-    <td>Stable species‑level profiles; rare taxa may be missed.</td>
-  </tr>
+    <tr>
+      <th>Depth (Gbp)</th>
+      <th>Use Case</th>
+      <th>Coverage (2 Mbp genome)</th>
+      <th>Coverage (3.5 Mbp genome)</th>
+      <th>Analytical Capabilities</th>
+    </tr>
 
-  <tr class="color-functional">
-    <td>5 Gbp</td>
-    <td><strong>Functional Profiling</strong></td>
-    <td>~2,500×</td>
-    <td>~1,400×</td>
-    <td>High pathway completeness; moderate rare gene recovery.</td>
-  </tr>
+    <tr class="color-taxonomy">
+      <td>0.5–2 Gbp</td>
+      <td><strong>Taxonomic Profiling</strong></td>
+      <td>~250×</td>
+      <td>~140×</td>
+      <td>Stable species‑level profiles; rare taxa may be missed.</td>
+    </tr>
 
-  <tr class="color-highres">
-    <td>10 Gbp</td>
-    <td><strong>High‑Resolution Functional</strong></td>
-    <td>≥10,000×</td>
-    <td>≥5,700×</td>
-    <td>Improved rare gene and protein detection.</td>
-  </tr>
-</table>
+    <tr class="color-functional">
+      <td>5 Gbp</td>
+      <td><strong>Functional Profiling</strong></td>
+      <td>~2,500×</td>
+      <td>~1,400×</td>
+      <td>High pathway completeness; moderate rare gene recovery.</td>
+    </tr>
 
-<p class="explain">
-This table uses fixed genome sizes and typical coverage thresholds.  
-It summarizes what biological insights become possible at different sequencing depths.  
-Lower depths support taxonomic profiling, while higher depths enable functional profiling and rare gene detection.  
-Genome size influences coverage, so organisms with larger genomes require more sequencing to reach the same resolution.
-</p>
+    <tr class="color-highres">
+      <td>10 Gbp</td>
+      <td><strong>High‑Resolution Functional</strong></td>
+      <td>≥10,000×</td>
+      <td>≥5,700×</td>
+      <td>Improved rare gene and protein detection.</td>
+    </tr>
+  </table>
 
-<!-- ============================
+  <p class="explain">
+    This table uses fixed genome sizes and typical coverage thresholds.
+    It summarizes what biological insights become possible at different sequencing depths.
+    Lower depths support taxonomic profiling, while higher depths enable functional profiling and rare gene detection.
+    Genome size influences coverage, so organisms with larger genomes require more sequencing to reach the same resolution.
+  </p>
+
+  <!-- ============================
      TABLE 2 — MAG RECOVERY
      ============================ -->
-<table id="magRecoveryTable" class="depth-cheatsheet">
-  <caption><strong>Expected MAG Recovery Across Sequencing Depths and Relative Abundances</strong></caption>
+  <table id="magRecoveryTable" class="depth-cheatsheet">
+    <caption><strong>Expected MAG Recovery Across Sequencing Depths and Relative Abundances</strong></caption>
+    <thead>
+      <tr>
+        <th>Sequencing Depth (Gb)</th>
+        <th colspan="6">Relative Abundance (fraction of community)</th>
+      </tr>
+      <tr>
+        <th></th>
+        <th>10%</th>
+        <th>5%</th>
+        <th>2.5%</th>
+        <th>1%</th>
+        <th>0.1%</th>
+        <th>0.01%</th>
+      </tr>
+    </thead>
+    <tbody></tbody>
+  </table>
 
-  <thead>
-    <tr>
-      <th>Sequencing Depth (Gb)</th>
-      <th colspan="6">Relative Abundance (fraction of community)</th>
-    </tr>
-    <tr>
-      <th></th>
-      <th>10%</th>
-      <th>5%</th>
-      <th>2.5%</th>
-      <th>1%</th>
-      <th>0.1%</th>
-      <th>0.01%</th>
-    </tr>
-  </thead>
+  <div class="mag-legend-box">
+    <div><strong>How to read this table</strong></div>
+    <div class="mag-legend-item">
+      <div class="mag-legend-color" style="background:#b7f7b7;"></div>
+      High MAG recovery — coverage ≥ MAG threshold (~11,400×)
+    </div>
+    <div class="mag-legend-item">
+      <div class="mag-legend-color" style="background:#f7f7b7;"></div>
+      Moderate — partial MAGs likely, some completeness
+    </div>
+    <div class="mag-legend-item">
+      <div class="mag-legend-color" style="background:#f7d3b7;"></div>
+      Low — fragments possible, but incomplete MAGs
+    </div>
+    <div class="mag-legend-item">
+      <div class="mag-legend-color" style="background:#f2b7b7;"></div>
+      Unlikely — insufficient coverage for assembly
+    </div>
+  </div>
 
-  <tbody></tbody>
-</table>
-
-<div class="mag-legend-box">
-  <div><strong>How to read this table</strong></div>
-  <div class="mag-legend-item">
-    <div class="mag-legend-color" style="background:#b7f7b7;"></div>
-    High MAG recovery — coverage ≥ MAG threshold (~11,400×)
-  </div>
-  <div class="mag-legend-item">
-    <div class="mag-legend-color" style="background:#f7f7b7;"></div>
-    Moderate — partial MAGs likely, some completeness
-  </div>
-  <div class="mag-legend-item">
-    <div class="mag-legend-color" style="background:#f7d3b7;"></div>
-    Low — fragments possible, but incomplete MAGs
-  </div>
-  <div class="mag-legend-item">
-    <div class="mag-legend-color" style="background:#f2b7b7;"></div>
-    Unlikely — insufficient coverage for assembly
-  </div>
+  <p class="explain">
+    This section uses sequencing depth, relative abundance, genome size, and DNA quantity.
+    MAG recovery requires extremely high coverage, so only abundant organisms at high sequencing depths reach the threshold.
+    Low-abundance organisms require disproportionately more sequencing to assemble complete genomes.
+    DNA quantity limits the effective depth, reducing MAG recovery potential even when nominal depth is high.
+  </p>
 </div>
-
-<p class="explain">
-This section uses sequencing depth, relative abundance, genome size, and DNA quantity.  
-MAG recovery requires extremely high coverage, so only abundant organisms at high sequencing depths reach the threshold.  
-Low-abundance organisms require disproportionately more sequencing to assemble complete genomes.  
-DNA quantity limits the effective depth, reducing MAG recovery potential even when nominal depth is high.
-</p>
 
 <!-- ============================
      MINIMUM RA CALCULATOR
      ============================ -->
-<h2>Minimum Relative Abundance Required</h2>
+<div class="section-card">
+  <div class="section-title">
+    <span class="icon">🔍</span>
+    <span>Minimum Relative Abundance Required</span>
+  </div>
 
-<p id="raResult" style="font-weight:bold;"></p>
+  <p id="raResult" style="font-weight:bold;"></p>
 
-<p class="explain">
-This section uses target coverage, genome size, sequencing depth, and DNA quantity.  
-It determines the minimum abundance at which an organism can be detected or assembled at a desired coverage.  
-Lower sequencing depth or larger genome size increases the required abundance.  
-DNA quantity limits the effective depth, raising the minimum abundance needed for detection.
-</p>
+  <p class="explain">
+    This section uses target coverage, genome size, sequencing depth, and DNA quantity.
+    It determines the minimum abundance at which an organism can be detected or assembled at a desired coverage.
+    Lower sequencing depth or larger genome size increases the required abundance.
+    DNA quantity limits the effective depth, raising the minimum abundance needed for detection.
+  </p>
+</div>
 
 <!-- ============================
      EXPLANATION & REFERENCES BOX
      ============================ -->
-<div style="margin-top:40px; padding:20px; border:2px solid #888; background:#f7f7f7;">
-
-  <h2>How These Calculations Work</h2>
+<div class="section-card">
+  <div class="section-title">
+    <span class="icon">📚</span>
+    <span>How These Calculations Work</span>
+  </div>
 
   <p><strong>1. Bases sequenced for the species</strong><br>
      Total sequencing depth is measured in gigabases (Gb), where 1 Gb = 10<sup>9</sup> bases.
@@ -403,8 +601,8 @@ DNA quantity limits the effective depth, raising the minimum abundance needed fo
 Species bases = (D × 10⁹) × A
   </pre>
 
-   <p>Where; D = Total sequencing depth (in gigabases, Gb).</p>
-  
+  <p>Where; D = Total sequencing depth (in gigabases, Gb).</p>
+
   <p><strong>2. Genome size conversion</strong><br>
      Genome size G is entered in megabases (Mb), where 1 Mb = 10<sup>6</sup> bases.
   </p>
@@ -422,7 +620,10 @@ Coverage = (D × 10⁹ × A) / (G × 10⁶)
          = (D × 1000 × A) / G
   </pre>
 
-  <p>In this tool, D is replaced by the DNA‑quantity–adjusted effective depth when DNA is limiting. This is the standard definition of sequencing coverage used in genomics and metagenomics.</p>
+  <p>
+    In this tool, D is replaced by the DNA‑quantity–adjusted effective depth when DNA is limiting.
+    This is the standard definition of sequencing coverage used in genomics and metagenomics.
+  </p>
 
   <p><strong>4. Required sequencing depth for a target coverage</strong><br>
      Rearranging the coverage formula gives:
@@ -564,6 +765,7 @@ Required depth (Gb) = (Coverage × G) / (1000 × A)
     for MAG recovery, pathway inference, and taxonomic profiling.
   </p>
 </div>
+
 
 <script>
 /* ============================================================
@@ -866,7 +1068,9 @@ document.getElementById("closeMinRApopup").onclick = function() {
 };
 </script>
 
+      </div> <!-- end app-shell -->
 </body>
+
 </html>
 
 
