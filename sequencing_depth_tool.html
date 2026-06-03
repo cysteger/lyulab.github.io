@@ -112,11 +112,11 @@
   }
 
   .input-label-row {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 6px;
-    margin-bottom: 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 2px;
+  margin-bottom: 4px;
   }
 
   .input-label-row span.main-label {
@@ -1059,13 +1059,23 @@ window.onload = generateAll;
 </script>
 
 <script>
-document.getElementById("minRAinfo").onclick = function() {
-  document.getElementById("minRApopup").style.display = "block";
-};
+window.addEventListener('load', function () {
+  var infoBtn = document.getElementById("minRAinfo");
+  var popup   = document.getElementById("minRApopup");
+  var closeBtn = document.getElementById("closeMinRApopup");
 
-document.getElementById("closeMinRApopup").onclick = function() {
-  document.getElementById("minRApopup").style.display = "none";
-};
+  if (infoBtn && popup) {
+    infoBtn.onclick = function () {
+      popup.style.display = "block";
+    };
+  }
+
+  if (closeBtn && popup) {
+    closeBtn.onclick = function () {
+      popup.style.display = "none";
+    };
+  }
+});
 </script>
 
       </div> <!-- end app-shell -->
