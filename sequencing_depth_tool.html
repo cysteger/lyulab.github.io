@@ -400,9 +400,11 @@ DNA quantity limits the effective depth, raising the minimum abundance needed fo
   </p>
 
   <pre style="background:#eee; padding:10px;">
-Species bases = D × 10⁹ × A
+Species bases = (D × 10⁹) × A
   </pre>
 
+   <p>Where; D = Total sequencing depth (in gigabases, Gb).</p>
+  
   <p><strong>2. Genome size conversion</strong><br>
      Genome size G is entered in megabases (Mb), where 1 Mb = 10<sup>6</sup> bases.
   </p>
@@ -420,7 +422,7 @@ Coverage = (D × 10⁹ × A) / (G × 10⁶)
          = (D × 1000 × A) / G
   </pre>
 
-  <p>This is the standard definition of sequencing coverage used in genomics and metagenomics.</p>
+  <p>In this tool, D is replaced by the DNA‑quantity–adjusted effective depth when DNA is limiting. This is the standard definition of sequencing coverage used in genomics and metagenomics.</p>
 
   <p><strong>4. Required sequencing depth for a target coverage</strong><br>
      Rearranging the coverage formula gives:
