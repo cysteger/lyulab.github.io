@@ -250,6 +250,13 @@
     border-radius: 10px;
     font-size: 13px;
   }
+
+  .result-value {
+  font-weight: 600;
+  color: var(--text-main);
+  font-size: 16px;
+}
+
 </style>
 
 </head>
@@ -395,22 +402,20 @@
     <span>Bases Sequenced for This Species</span>
   </div>
 
-  <p id="speciesBases"></p>
+  <p id="speciesBases" class="result-value"></p>
 </div>
 
   
 <!-- ============================
      COVERAGE FROM DEPTH
      ============================ -->
-<h2>Coverage From Sequencing Depth</h2>
-
 <div class="section-card">
   <div class="section-title">
     <span class="icon">📊</span>
     <span>Coverage From Sequencing Depth</span>
   </div>
 
-  <p id="coverageResult" style="font-weight:bold;"></p>
+  <p id="coverageResult" class="result-value"></p>
   <p class="explain">
 This section uses relative abundance, genome size, sequencing depth, and DNA quantity.  
 Coverage represents how many times each base of the genome is sequenced on average.  
@@ -430,7 +435,7 @@ DNA quantity acts as a cap on effective sequencing depth, limiting achievable co
     <span>Required Sequencing Depth</span>
   </div>
 
-  <p id="depthResult"></p>
+  <p id="depthResult" class="result-value"></p>
   <p class="explain">This section uses target coverage, relative abundance, genome size, and DNA quantity.  
 It calculates how much sequencing is needed to reach a desired coverage level for a given organism.  
 Lower abundance organisms require disproportionately more sequencing to reach the same coverage.  
@@ -599,7 +604,7 @@ DNA quantity limits the maximum achievable depth, so extremely high target cover
     <span>Minimum Relative Abundance Required</span>
   </div>
 
-  <p id="raResult" style="font-weight:bold;"></p>
+  <p id="raResult" class="result-value"></p>
 
   <p class="explain">
     This section uses target coverage, genome size, sequencing depth, and DNA quantity.
