@@ -280,6 +280,7 @@
 
   <div class="input-grid">
 
+    <!-- Relative Abundance -->
     <div class="input-field">
       <div class="input-label-row">
         <span class="main-label">Relative abundance (%)</span>
@@ -291,6 +292,7 @@
       </div>
     </div>
 
+    <!-- Genome Size -->
     <div class="input-field">
       <div class="input-label-row">
         <span class="main-label">Genome size (Mb)</span>
@@ -302,6 +304,7 @@
       </div>
     </div>
 
+    <!-- Sequencing Depth -->
     <div class="input-field">
       <div class="input-label-row">
         <span class="main-label">Sequencing depth (Gb)</span>
@@ -313,6 +316,7 @@
       </div>
     </div>
 
+    <!-- Target Coverage -->
     <div class="input-field">
       <div class="input-label-row">
         <span class="main-label">Target coverage (×)</span>
@@ -324,6 +328,7 @@
       </div>
     </div>
 
+    <!-- Minimum RA Coverage -->
     <div class="input-field">
       <div class="input-label-row">
         <span class="main-label">Target coverage for minimum RA (×)</span>
@@ -338,11 +343,15 @@
           <option value="20">20×</option>
           <option value="30">30×</option>
         </select>
-        <button type="button" id="minRAinfo" style="margin-top:0; padding:4px 8px; font-size:12px;">?</button>
+
+        <button type="button" id="minRAinfo"
+                style="margin-top:0; padding:4px 8px; font-size:12px;">?</button>
+
         <label><input type="checkbox" id="use_minRAcoverage" checked> Use</label>
       </div>
     </div>
 
+    <!-- DNA Quantity -->
     <div class="input-field">
       <div class="input-label-row">
         <span class="main-label">DNA quantity (ng)</span>
@@ -354,10 +363,28 @@
       </div>
     </div>
 
-  </div>
+  </div> <!-- end .input-grid -->
 
   <button onclick="generateAll()">Generate All Results</button>
+</div> <!-- end .input-panel -->
+
+<div id="minRApopup"
+     style="display:none; position:fixed; top:20%; left:50%; transform:translateX(-50%);
+            background:white; border:1px solid #888; padding:20px; width:350px;
+            box-shadow:0 0 10px rgba(0,0,0,0.3); z-index:9999;">
+  <h3>Coverage Thresholds Explained</h3>
+  <ul style="font-size:14px; line-height:1.4;">
+    <li><strong>1×</strong> — Minimal evidence of presence; very permissive.</li>
+    <li><strong>3×</strong> — Low-confidence detection; weak presence/absence.</li>
+    <li><strong>5×</strong> — Common minimum RA threshold; moderate confidence.</li>
+    <li><strong>10×</strong> — High-confidence detection; recommended default.</li>
+    <li><strong>20×</strong> — Reliable detection + basic variant calling.</li>
+    <li><strong>30×</strong> — High-confidence variant calling; strain-level work.</li>
+  </ul>
+  <button id="closeMinRApopup"
+          style="margin-top:10px; padding:5px 10px; cursor:pointer;">Close</button>
 </div>
+
 
 <!-- ============================
      BASES SEQUENCED FOR THIS SPECIES
