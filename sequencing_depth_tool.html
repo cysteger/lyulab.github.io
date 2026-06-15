@@ -272,19 +272,12 @@ th {
    TWO-COLUMN LAYOUT (CLEANED)
    ============================ */
 
+/* Stack sections instead of side-by-side */
 .two-col-wrapper {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 28px;
   margin-top: 30px;
-
-  /* MATCH input panel width */
-  max-width: 1000px;
-  width: 100%;
-  margin: 0 auto; /* center inside app-shell */
 }
 
-/* Column boxes */
+/* Column boxes (now just stacked cards) */
 .analysis-box {
   background: #e0e8f2;
   border: 1px solid var(--border-card);
@@ -294,9 +287,9 @@ th {
   display: flex;
   flex-direction: column;
   gap: 22px;
+  margin-top: 24px; /* space between sections */
 }
 
-/* Right column color */
 .analysis-box:nth-child(2) {
   background: #e3ede4;
 }
@@ -460,7 +453,7 @@ th {
 <!-- ============================
      TWO-COLUMN RESULTS LAYOUT
      ============================ -->
-    <section id="analysis-sections" class="two-col-wrapper">
+  <section class="two-col-wrapper">
   
     <!-- ============================
          COLUMN 1 — POST-SEQUENCING ANALYSIS
