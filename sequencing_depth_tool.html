@@ -271,7 +271,13 @@
   grid-template-columns: 1fr 1fr;
   gap: 28px;
   margin-top: 30px;
+
+  /* NEW: center the columns */
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
 }
+
 
 /* Column container */
 .analysis-box {
@@ -284,8 +290,27 @@
 @media (max-width: 900px) {
   .two-col-wrapper {
     grid-template-columns: 1fr;
+    max-width: 600px; /* keeps it centered on mobile */
   }
 }
+
+.analysis-box {
+  background: #e0e8f2; /* Block color */
+  border: 1px solid var(--border-card);
+  border-radius: var(--radius-card);
+  padding: 22px;
+  box-shadow: var(--shadow-soft);
+
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* Slight color variation for the right column */
+.analysis-box:nth-child(2) {
+  background: #e3ede4; /* very soft blue tint */
+}
+  
 
 </style>
 
