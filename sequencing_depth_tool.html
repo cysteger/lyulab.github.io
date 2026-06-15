@@ -272,17 +272,16 @@ th {
    TWO-COLUMN LAYOUT (CLEANED)
    ============================ */
 
-/* Outer centering wrapper */
-.analysis-container {
-  width: 100%;
-}
-
-/* Grid wrapper */
 .two-col-wrapper {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 28px;
   margin-top: 30px;
+
+  /* MATCH input panel width */
+  max-width: 1000px;
+  width: 100%;
+  margin: 0 auto; /* center inside app-shell */
 }
 
 /* Column boxes */
@@ -461,7 +460,6 @@ th {
 <!-- ============================
      TWO-COLUMN RESULTS LAYOUT
      ============================ -->
- <div class="analysis-container">
     <section id="analysis-sections" class="two-col-wrapper">
   
     <!-- ============================
@@ -634,7 +632,6 @@ th {
     </div> <!-- END COLUMN 2 -->
   
   </section>
- </div>
 
 
 
