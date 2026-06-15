@@ -265,6 +265,28 @@
   display: block;        /* removes inline spacing issues */
 }
 
+/* Two-column layout wrapper */
+.two-col-wrapper {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  margin-top: 30px;
+}
+
+/* Column container */
+.analysis-box {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+/* Responsive collapse */
+@media (max-width: 900px) {
+  .two-col-wrapper {
+    grid-template-columns: 1fr;
+  }
+}
+
 </style>
 
 </head>
@@ -411,215 +433,191 @@
 
 
 
-<!-- ============================
-     BASES SEQUENCED FOR THIS SPECIES
-     ============================ -->
-<div class="section-card">
-  <div class="section-title">
-    <span>Bases Sequenced for This Species</span>
-  </div>
-
-  <p id="speciesBases" class="result-value"></p>
-</div>
-
-  
-<!-- ============================
-     COVERAGE FROM DEPTH
-     ============================ -->
-<div class="section-card">
-  <div class="section-title">
-    <span>Coverage From Sequencing Depth</span>
-  </div>
-
-  <p id="coverageResult" class="result-value"></p>
-  <p class="explain">
-This section uses relative abundance, genome size, sequencing depth, and DNA quantity.  
-Coverage represents how many times each base of the genome is sequenced on average.  
-Higher coverage increases confidence in detection, reduces false negatives, and improves assembly quality.  
-DNA quantity acts as a cap on effective sequencing depth, limiting achievable coverage regardless of nominal depth.
-  </p>
-</div>
-
-
+    
 
 <!-- ============================
-     REQUIRED DEPTH CALCULATOR
+     TWO-COLUMN RESULTS LAYOUT
      ============================ -->
-<div class="section-card">
-  <div class="section-title">
-    <span>Required Sequencing Depth</span>
-  </div>
-
-  <p id="depthResult" class="result-value"></p>
-  <p class="explain">This section uses target coverage, relative abundance, genome size, and DNA quantity.  
-It calculates how much sequencing is needed to reach a desired coverage level for a given organism.  
-Lower abundance organisms require disproportionately more sequencing to reach the same coverage.  
-DNA quantity limits the maximum achievable depth, so extremely high target coverage may be impossible.</p>
-</div>
-
-<!-- ============================
-     CHEAT SHEET
-     ============================ -->
-<div class="section-card">
-  <div class="section-title">
-    <span>Coverage Estimation Table</span>
-  </div>
-
-  <p style="font-size:14px;">
-    Coverage Estimation Table values are automatically adjusted based on the DNA quantity entered above.
-  </p>
-
-  <div class="scroll-table">
-    <table id="cheatTable">
-      <caption><strong>Coverage Estimation Table (Depth × Relative Abundance)</strong></caption>
-      <thead>
-        <tr>
-          <th>Depth (Gb)</th>
-          <th>RA 0.01%</th>
-          <th>RA 0.05%</th>
-          <th>RA 0.1%</th>
-          <th>RA 1%</th>
-          <th>RA 2.5%</th>
-          <th>RA 5%</th>
-          <th>RA 10%</th>
-          <th>RA 15%</th>
-          <th>RA 20%</th>
-        </tr>
-      </thead>
-      <tbody></tbody>
-    </table>
-  </div>
-
-  <p class="explain">
-    This section uses genome size, DNA quantity, and a range of depths and abundances.
-    It provides a quick reference for expected coverage across common sequencing depths and microbial abundances.
-    Coverage values help determine whether taxonomic profiling, functional profiling, or MAG recovery is feasible.
-    DNA quantity limits the effective depth, so deeper sequencing may not increase coverage if DNA is limiting.
-  </p>
-
-  <div id="legendBox" class="legend-box"></div>
-   <table class="depth-cheatsheet">
-    <caption><strong>Recommended Sequencing Depths for Taxonomic and Functional Profiling</strong></caption>
-
-    <tr>
-      <th>Depth (Gbp)</th>
-      <th>Use Case</th>
-      <th>Coverage (2 Mbp genome)</th>
-      <th>Coverage (3.5 Mbp genome)</th>
-      <th>Analytical Capabilities</th>
-    </tr>
-
-    <tr class="color-taxonomy">
-      <td>0.5–2 Gbp</td>
-      <td><strong>Taxonomic Profiling</strong></td>
-      <td>~250×</td>
-      <td>~140×</td>
-      <td>Stable species‑level profiles; rare taxa may be missed.</td>
-    </tr>
-
-    <tr class="color-functional">
-      <td>5 Gbp</td>
-      <td><strong>Functional Profiling</strong></td>
-      <td>~2,500×</td>
-      <td>~1,400×</td>
-      <td>High pathway completeness; moderate rare gene recovery.</td>
-    </tr>
-
-    <tr class="color-highres">
-      <td>10 Gbp</td>
-      <td><strong>High‑Resolution Functional</strong></td>
-      <td>≥10,000×</td>
-      <td>≥5,700×</td>
-      <td>Improved rare gene and protein detection.</td>
-    </tr>
-  </table>
-
-</div>
-
-<!-- ============================
-     TABLE 1 — TAXONOMIC + FUNCTIONAL PROFILING
-     ============================ -->
-<div class="section-card">
-  <div class="section-title">
-    <span>MAG Recovery Potential</span>
-  </div>
-
- 
-  <p class="explain">
-    This table uses fixed genome sizes and typical coverage thresholds.
-    It summarizes what biological insights become possible at different sequencing depths.
-    Lower depths support taxonomic profiling, while higher depths enable functional profiling and rare gene detection.
-    Genome size influences coverage, so organisms with larger genomes require more sequencing to reach the same resolution.
-  </p>
+<section id="analysis-sections" class="two-col-wrapper">
 
   <!-- ============================
-     TABLE 2 — MAG RECOVERY
-     ============================ -->
-  <table id="magRecoveryTable" class="depth-cheatsheet">
-    <caption><strong>Expected MAG Recovery Across Sequencing Depths and Relative Abundances</strong></caption>
-    <thead>
-      <tr>
-        <th>Sequencing Depth (Gb)</th>
-        <th colspan="6">Relative Abundance (fraction of community)</th>
-      </tr>
-      <tr>
-        <th></th>
-        <th>10%</th>
-        <th>5%</th>
-        <th>2.5%</th>
-        <th>1%</th>
-        <th>0.1%</th>
-        <th>0.01%</th>
-      </tr>
-    </thead>
-    <tbody></tbody>
-  </table>
+       COLUMN 1 — POST-SEQUENCING ANALYSIS
+       ============================ -->
+  <div class="analysis-box">
 
-  <div class="mag-legend-box">
-    <div><strong>How to read this table</strong></div>
-    <div class="mag-legend-item">
-      <div class="mag-legend-color" style="background:#b7f7b7;"></div>
-      High MAG recovery — coverage ≥ MAG threshold (~11,400×)
+    <h2>Post‑Sequencing Analysis</h2>
+    <p class="explain">
+      These outputs describe what coverage was actually achieved based on the observed
+      sequencing depth, relative abundance, genome size, and DNA quantity.
+    </p>
+
+    <!-- Bases Sequenced -->
+    <div class="section-card">
+      <div class="section-title"><span>Bases Sequenced for This Species</span></div>
+      <p id="speciesBases" class="result-value"></p>
     </div>
-    <div class="mag-legend-item">
-      <div class="mag-legend-color" style="background:#f7f7b7;"></div>
-      Moderate — partial MAGs likely, some completeness
+
+    <!-- Coverage From Depth -->
+    <div class="section-card">
+      <div class="section-title"><span>Coverage From Sequencing Depth</span></div>
+      <p id="coverageResult" class="result-value"></p>
+      <p class="explain">
+        This section uses relative abundance, genome size, sequencing depth, and DNA quantity.
+        DNA quantity caps the maximum achievable coverage when nominal depth exceeds the number
+        of unique DNA molecules available.
+      </p>
     </div>
-    <div class="mag-legend-item">
-      <div class="mag-legend-color" style="background:#f7d3b7;"></div>
-      Low — fragments possible, but incomplete MAGs
+
+    <!-- MAG Recovery Table -->
+    <div class="section-card">
+      <div class="section-title"><span>MAG Recovery Potential</span></div>
+
+      <p class="explain">
+        This table summarizes expected MAG recovery across sequencing depths and abundances.
+        MAG recovery requires extremely high coverage, so only abundant organisms at high
+        sequencing depths reach the threshold.
+      </p>
+
+      <table id="magRecoveryTable" class="depth-cheatsheet">
+        <caption><strong>Expected MAG Recovery Across Sequencing Depths and Relative Abundances</strong></caption>
+        <thead>
+          <tr>
+            <th>Sequencing Depth (Gb)</th>
+            <th colspan="6">Relative Abundance (fraction of community)</th>
+          </tr>
+          <tr>
+            <th></th>
+            <th>10%</th>
+            <th>5%</th>
+            <th>2.5%</th>
+            <th>1%</th>
+            <th>0.1%</th>
+            <th>0.01%</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+
+      <div class="mag-legend-box">
+        <div><strong>How to read this table</strong></div>
+        <div class="mag-legend-item"><div class="mag-legend-color" style="background:#b7f7b7;"></div>High MAG recovery</div>
+        <div class="mag-legend-item"><div class="mag-legend-color" style="background:#f7f7b7;"></div>Moderate</div>
+        <div class="mag-legend-item"><div class="mag-legend-color" style="background:#f7d3b7;"></div>Low</div>
+        <div class="mag-legend-item"><div class="mag-legend-color" style="background:#f2b7b7;"></div>Unlikely</div>
+      </div>
     </div>
-    <div class="mag-legend-item">
-      <div class="mag-legend-color" style="background:#f2b7b7;"></div>
-      Unlikely — insufficient coverage for assembly
+
+  </div> <!-- END COLUMN 1 -->
+
+
+  <!-- ============================
+       COLUMN 2 — PRE-SEQUENCING ESTIMATION
+       ============================ -->
+  <div class="analysis-box">
+
+    <h2>Pre‑Sequencing Estimation</h2>
+    <p class="explain">
+      These outputs describe what sequencing depth is required to reach a target coverage
+      or what minimum abundance is detectable at a given depth.
+    </p>
+
+    <!-- Required Depth -->
+    <div class="section-card">
+      <div class="section-title"><span>Required Sequencing Depth</span></div>
+      <p id="depthResult" class="result-value"></p>
+      <p class="explain">
+        Calculates how much sequencing is needed to reach a desired coverage level.
+        Lower abundance organisms require disproportionately more sequencing.
+      </p>
     </div>
-  </div>
 
-  <p class="explain">
-    This section uses sequencing depth, relative abundance, genome size, and DNA quantity.
-    MAG recovery requires extremely high coverage, so only abundant organisms at high sequencing depths reach the threshold.
-    Low-abundance organisms require disproportionately more sequencing to assemble complete genomes.
-    DNA quantity limits the effective depth, reducing MAG recovery potential even when nominal depth is high.
-  </p>
-</div>
+    <!-- Minimum RA -->
+    <div class="section-card">
+      <div class="section-title"><span>Minimum Relative Abundance Required</span></div>
+      <p id="raResult" class="result-value"></p>
+      <p class="explain">
+        Determines the minimum abundance at which an organism can be detected or assembled
+        at a desired coverage. DNA quantity limits the effective depth and increases the
+        required abundance.
+      </p>
+    </div>
 
-<!-- ============================
-     MINIMUM RA CALCULATOR
-     ============================ -->
-<div class="section-card">
-  <div class="section-title">
-    <span>Minimum Relative Abundance Required</span>
-  </div>
+    <!-- Coverage Estimation Table -->
+    <div class="section-card">
+      <div class="section-title"><span>Coverage Estimation Table</span></div>
 
-  <p id="raResult" class="result-value"></p>
+      <p style="font-size:14px;">
+        Values are automatically adjusted based on genome size and DNA quantity.
+      </p>
 
-  <p class="explain">
-    This section uses target coverage, genome size, sequencing depth, and DNA quantity.
-    It determines the minimum abundance at which an organism can be detected or assembled at a desired coverage.
-    Lower sequencing depth or larger genome size increases the required abundance.
-    DNA quantity limits the effective depth, raising the minimum abundance needed for detection.
-  </p>
-</div>
+      <div class="scroll-table">
+        <table id="cheatTable">
+          <caption><strong>Coverage Estimation Table (Depth × Relative Abundance)</strong></caption>
+          <thead>
+            <tr>
+              <th>Depth (Gb)</th>
+              <th>RA 0.01%</th>
+              <th>RA 0.05%</th>
+              <th>RA 0.1%</th>
+              <th>RA 1%</th>
+              <th>RA 2.5%</th>
+              <th>RA 5%</th>
+              <th>RA 10%</th>
+              <th>RA 15%</th>
+              <th>RA 20%</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+
+      <div id="legendBox" class="legend-box"></div>
+
+      <table class="depth-cheatsheet">
+        <caption><strong>Recommended Sequencing Depths for Taxonomic and Functional Profiling</strong></caption>
+        <tr>
+          <th>Depth (Gbp)</th>
+          <th>Use Case</th>
+          <th>Coverage (2 Mbp)</th>
+          <th>Coverage (3.5 Mbp)</th>
+          <th>Analytical Capabilities</th>
+        </tr>
+        <tr class="color-taxonomy">
+          <td>0.5–2 Gbp</td>
+          <td><strong>Taxonomic Profiling</strong></td>
+          <td>~250×</td>
+          <td>~140×</td>
+          <td>Stable species‑level profiles</td>
+        </tr>
+        <tr class="color-functional">
+          <td>5 Gbp</td>
+          <td><strong>Functional Profiling</strong></td>
+          <td>~2,500×</td>
+          <td>~1,400×</td>
+          <td>High pathway completeness</td>
+        </tr>
+        <tr class="color-highres">
+          <td>10 Gbp</td>
+          <td><strong>High‑Resolution Functional</strong></td>
+          <td>≥10,000×</td>
+          <td>≥5,700×</td>
+          <td>Rare gene detection</td>
+        </tr>
+      </table>
+
+    </div>
+
+  </div> <!-- END COLUMN 2 -->
+
+</section>
+
+
+
+
+
+
+    
+ 
 
 <!-- ============================
      EXPLANATION & REFERENCES BOX
