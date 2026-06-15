@@ -313,8 +313,8 @@ th {
 <h1>Meta-CD: Metagenomic Sequencing Coverage and Depth Calculator</h1>
 
 <p style="font-size:16px; margin-top:10px;">
-  This tool is designed for species‑specific metagenomic evaluation (post sequencing and community processing),
-  allowing researchers to estimate the sequencing coverage, required depth, minimum detectable abundance, and
+  This tool is designed for species‑specific metagenomic evaluation.
+  Allowing researchers to estimate the sequencing coverage, required depth, minimum detectable abundance, and
   MAG recovery potential for an individual microbial species; based on its genome size, relative abundance,
   sequencing depth, and sample DNA quantity.
 </p>
@@ -543,9 +543,10 @@ th {
         <div class="section-title"><span>Required Sequencing Depth</span></div>
         <p id="depthResult" class="result-value"></p>
         <p class="explain">
-          ower abundance organisms require disproportionately more sequencing to reach the same 
-          coverage. DNA quantity limits the maximum achievable depth, so extremely high target coverage 
-          may be impossible.
+          Uses target coverage, relative abundance, genome size, and DNA quantity and calculates 
+          how much sequencing is needed to reach a desired coverage level for a given organism. 
+          Lower abundance organisms require disproportionately more sequencing to reach the same coverage. 
+          DNA quantity limits the maximum achievable depth, so high target coverage may not be possible.
         </p>
       </div>
   
@@ -567,6 +568,14 @@ th {
   
         <p style="font-size:14px;">
           Values are automatically adjusted based on genome size and DNA quantity.
+        </p>
+
+         <p>
+          This table uses genome size, DNA quantity, and a range of depths and abundances. 
+          It provides a quick reference for expected coverage across common sequencing depths 
+          and microbial abundances. Coverage values help determine whether taxonomic profiling, 
+          functional profiling, or MAG recovery is feasible. DNA quantity limits the effective depth, 
+          so deeper sequencing may not increase coverage if DNA quantity is limited.
         </p>
   
         <div class="scroll-table">
@@ -591,14 +600,6 @@ th {
         </div>
   
         <div id="legendBox" class="legend-box"></div>
-
-        <p>
-          This table uses genome size, DNA quantity, and a range of depths and abundances. 
-          It provides a quick reference for expected coverage across common sequencing depths 
-          and microbial abundances. Coverage values help determine whether taxonomic profiling, 
-          functional profiling, or MAG recovery is feasible. DNA quantity limits the effective depth, 
-          so deeper sequencing may not increase coverage if DNA quantity is limited.
-        </p>
         
         <table class="depth-cheatsheet">
           <caption><strong>Recommended Sequencing Depths for Taxonomic and Functional Profiling</strong></caption>
