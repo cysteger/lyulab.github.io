@@ -477,9 +477,11 @@ th {
         <div class="section-title"><span>Coverage From Sequencing Depth</span></div>
         <p id="coverageResult" class="result-value"></p>
         <p class="explain">
-          This section uses relative abundance, genome size, sequencing depth, and DNA quantity.
-          DNA quantity caps the maximum achievable coverage when nominal depth exceeds the number
-          of unique DNA molecules available.
+          Uses relative abundance, genome size, sequencing depth, and DNA quantity. 
+          Coverage represents how many times each base of the genome is sequenced on average. Higher 
+          coverage increases confidence in detection, reduces false negatives, and improves assembly quality. 
+          DNA quantity acts as a cap on effective sequencing depth, limiting achievable coverage regardless of
+          nominal depth.
         </p>
       </div>
   
@@ -489,7 +491,7 @@ th {
   
         <p class="explain">
           This table summarizes expected MAG recovery across sequencing depths and abundances.
-          MAG recovery requires extremely high coverage, so only abundant organisms at high
+          MAG recovery requires high coverage, so only abundant organisms at high
           sequencing depths reach the threshold.
         </p>
   
@@ -541,8 +543,9 @@ th {
         <div class="section-title"><span>Required Sequencing Depth</span></div>
         <p id="depthResult" class="result-value"></p>
         <p class="explain">
-          Calculates how much sequencing is needed to reach a desired coverage level.
-          Lower abundance organisms require disproportionately more sequencing.
+          ower abundance organisms require disproportionately more sequencing to reach the same 
+          coverage. DNA quantity limits the maximum achievable depth, so extremely high target coverage 
+          may be impossible.
         </p>
       </div>
   
@@ -552,8 +555,9 @@ th {
         <p id="raResult" class="result-value"></p>
         <p class="explain">
           Determines the minimum abundance at which an organism can be detected or assembled
-          at a desired coverage. DNA quantity limits the effective depth and increases the
-          required abundance.
+          at a desired coverage. Uses target coverage, genome size, sequencing depth, and DNA quantity. 
+          Lower sequencing depth or larger genome size increases the required abundance. DNA quantity 
+          limits the effective depth, raising the minimum abundance needed for detection.
         </p>
       </div>
   
@@ -587,7 +591,15 @@ th {
         </div>
   
         <div id="legendBox" class="legend-box"></div>
-  
+
+        <p>
+          This table uses genome size, DNA quantity, and a range of depths and abundances. 
+          It provides a quick reference for expected coverage across common sequencing depths 
+          and microbial abundances. Coverage values help determine whether taxonomic profiling, 
+          functional profiling, or MAG recovery is feasible. DNA quantity limits the effective depth, 
+          so deeper sequencing may not increase coverage if DNA quantity is limited.
+        </p>
+        
         <table class="depth-cheatsheet">
           <caption><strong>Recommended Sequencing Depths for Taxonomic and Functional Profiling</strong></caption>
           <tr>
@@ -619,6 +631,13 @@ th {
             <td>Rare gene detection</td>
           </tr>
         </table>
+
+        <p>
+          This table uses fixed genome sizes and typical coverage thresholds. It summarizes what biological 
+          insights become possible at different sequencing depths. Lower depths support taxonomic profiling, 
+          while higher depths enable functional profiling and rare gene detection. Genome size influences coverage, 
+          so organisms with larger genomes require more sequencing to reach the same resolution.
+        </p>
   
       </div>
   
